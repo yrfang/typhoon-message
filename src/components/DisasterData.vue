@@ -1,15 +1,19 @@
 <template lang="pug">
 .DisasterData
+  h3 災害最新統計({{ dataCount }})
   table.table
     thead
       tr
         th 日期時間
         th 區域名稱
-        th 地點
+        th 詳細地點
         th 事故描述
     tbody
-      tr(v-for="area in areas")
-        td {{area.value}}
+      tr(v-for="data in disasterData")
+        td {{data.CaseTime}}
+        td {{data.CaseLocationDistrict}}
+        td {{data.CaseLocationDescription}}
+        td {{data.CaseDescription}}
 </template>
 
 <script>
@@ -76,10 +80,17 @@ export default {
   mounted() {
     this.getData();
   },
+  computed: {
+    dataCount() {
+      return this.disasterData.length;
+    }
+  },
   methods: {
     getData() {
       axios.get(DisasterApiUrl).then((response) => {
         // console.log(response.data);
+
+        // JSON responses are automatically parsed.
         this.disasterData = response.data.DataSet['diffgr:diffgram'].NewDataSet.CASE_SUMMARY;
         console.log(this.disasterData);
       }).catch((error) => { console.log(error); });
