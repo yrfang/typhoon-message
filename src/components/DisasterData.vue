@@ -3,14 +3,21 @@
   table.table
     thead
       tr
+        th 日期時間
         th 區域名稱
+        th 地點
+        th 事故描述
     tbody
       tr(v-for="area in areas")
-        td {{ area.value }}
+        td {{area.value}}
+        td {{area.label}}
 </template>
 
 <script>
+const DisasterApiUrl = "https://tcgbusfs.blob.core.windows.net/blobfs/GetDisasterSummary.json";
+
 export default {
+  // components: { DisasterTable },
   data() {
     return {
       areas: [
@@ -58,7 +65,19 @@ export default {
       disasterData: [],
     };
   },
+  mounted() {
+    var vobj = this;
+    // $.ajax({
+    //   url: DisasterApiUrl,
+    //   success: function(result) {
+    //     vobj.disasterData = JSON.parse(result);
+    //     console.log(vobj.disasterData);
+    //   }
+    // });
+  },
+  methods: {
 
+  }
 }
 </script>
 
