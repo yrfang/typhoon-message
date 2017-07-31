@@ -10,10 +10,11 @@
     tbody
       tr(v-for="area in areas")
         td {{area.value}}
-        td {{area.label}}
 </template>
 
 <script>
+import axios from 'axios';
+
 const DisasterApiUrl = "https://tcgbusfs.blob.core.windows.net/blobfs/GetDisasterSummary.json";
 
 export default {
@@ -65,18 +66,24 @@ export default {
       disasterData: [],
     };
   },
+  // Fetches posts when the component is created.
+  // created() {
+  //   Vue.axios.get(`http://jsonplaceholder.typicode.com/posts`).then((response) => {
+  //     // JSON responses are automatically parsed.
+  //     console.log(response.data);
+  //   })
+  // },
   mounted() {
-    var vobj = this;
-    // $.ajax({
-    //   url: DisasterApiUrl,
-    //   success: function(result) {
-    //     vobj.disasterData = JSON.parse(result);
-    //     console.log(vobj.disasterData);
-    //   }
-    // });
+    this.getData();
   },
   methods: {
-
+    getData() {
+      axios.get(DisasterApiUrl).then((response) => {
+        // console.log(response.data);
+        this.disasterData = response.data.DataSet['diffgr:diffgram'].NewDataSet.CASE_SUMMARY;
+        console.log(this.disasterData);
+      }).catch((error) => { console.log(error); });
+    },
   }
 }
 </script>
