@@ -1,28 +1,23 @@
 <template lang="pug">
-.DisasterData
-  h3 災害最新統計({{ dataCount }})
-  table.table
-    thead
-      tr
-        th 日期時間
-        th 區域名稱
-        th 詳細地點
-        th 事故描述
-    tbody
-      tr(v-for="data in disasterData")
-        td {{data.CaseTime}}
-        td {{data.CaseLocationDistrict}}
-        td {{data.CaseLocationDescription}}
-        td {{data.CaseDescription}}
+.DisasterData.container
+  .row.navInformation
+    .col-xs-12
+      a 災情更新
+      a 災情位置
+  .row
+    h4.col-xs-12 災害統計({{ dataCount }})
+    DisasterTable(:dataRow="disasterData", :headingsRow="headings")
 </template>
 
 <script>
 import axios from 'axios';
 
+import DisasterTable from '@/components/DisasterTable';
+
 const DisasterApiUrl = "https://tcgbusfs.blob.core.windows.net/blobfs/GetDisasterSummary.json";
 
 export default {
-  // components: { DisasterTable },
+  components: { DisasterTable },
   data() {
     return {
       areas: [
@@ -68,15 +63,11 @@ export default {
         }],
       selectedValue: '',
       disasterData: [],
+      // rowKey: [ "日期時間", "區域名稱", "詳細地點", "事故描述"],
+      headings: ["CaseTime", "CaseLocationDistrict", "CaseLocationDescription", "CaseDescription"
+    ],
     };
   },
-  // Fetches posts when the component is created.
-  // created() {
-  //   Vue.axios.get(`http://jsonplaceholder.typicode.com/posts`).then((response) => {
-  //     // JSON responses are automatically parsed.
-  //     console.log(response.data);
-  //   })
-  // },
   mounted() {
     this.getData();
   },
@@ -100,9 +91,10 @@ export default {
 </script>
 
 <style lang="sass">
-.table
-  text-align: left
-  width: 80%
-  margin-left: auto
-  margin-right: auto
+.row.navInformation
+  margin-bottom: 20px
+
+  a
+    margin-right: 10px
+    font-size: 18px
 </style>
