@@ -32,12 +32,15 @@ table
 
   thead tr th
     &:nth-child(1)
-      width: 120px
+      width: 20%
     &:nth-child(2)
-      width: 100px
+      width: 15%
     &:nth-child(3)
-      width: 220px
-    &:nth-child(4)
       width: 200px
+    &:nth-child(4)
+      width: 30%
+
+  .table th, .table td
+    padding-right: 20px
 
 </style>

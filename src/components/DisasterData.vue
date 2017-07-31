@@ -1,5 +1,5 @@
 <template lang="pug">
-.DisasterData.container
+.DisasterData.tableList
   .row.navInformation
     .col-xs-12
       a 災情更新
@@ -63,7 +63,6 @@ export default {
         }],
       selectedValue: '',
       disasterData: [],
-      // rowKey: [ "日期時間", "區域名稱", "詳細地點", "事故描述"],
       headings: ["CaseTime", "CaseLocationDistrict", "CaseLocationDescription", "CaseDescription"
     ],
     };
@@ -91,10 +90,15 @@ export default {
 </script>
 
 <style lang="sass">
-.row.navInformation
-  margin-bottom: 20px
+.tableList
+  margin-left: auto
+  margin-right: auto
+  padding: 20px
 
-  a
-    margin-right: 10px
-    font-size: 18px
+  .row.navInformation
+    margin-bottom: 20px
+
+    a
+      margin-right: 10px
+      font-size: 18px
 </style>
