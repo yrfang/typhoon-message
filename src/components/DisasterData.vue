@@ -7,7 +7,10 @@
   .row
     h5.col-xs-12 災害統計({{ dataCount }})
   .row
-    DisasterTable(:dataRow="disasterData", :headingsRow="headings", :areasTable="areas")
+    DisasterTable(:dataRow="disasterData",
+                  :headingsRow="headings",
+                  :areasTable="areas",
+                  :key="disasterData.id")
 </template>
 
 <script>
@@ -62,7 +65,7 @@ export default {
           value: '內湖區',
           label: '內湖區',
         }],
-      selectedValue: '',
+      // selectedArea: '',
       disasterData: [],
       headings: ["CaseTime", "CaseLocationDistrict", "CaseLocationDescription", "Name"
     ],
