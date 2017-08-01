@@ -1,5 +1,5 @@
 <template lang="pug">
-.DisasterTable
+.DisasterTable.outerContainer
   select.form-control(id="area-select",
          placeholder="請選擇行政區",
          v-model="selectedArea")
@@ -8,6 +8,19 @@
   select.form-control(v-model="pageCount")
     option(v-for="page in pageLength", v-bind:value="page.value") {{page.value}} 筆/頁
   span selected: {{ pageCount }}
+  br
+  nav.pageSlice
+    ul.pagination
+      li.page-item
+        a.page-link(href='#', aria-label='Previous')
+          span(aria-hidden='true') «
+          span.sr-only Previous
+      li.page-item(v-for="page in totalPage")
+        a.page-link(href='#') {{ page }}
+      li.page-item
+        a.page-link(href='#', aria-label='Next')
+          span(aria-hidden='true') »
+          span.sr-only Next
   br
   table.table
     thead
@@ -73,7 +86,7 @@ export default {
       return this.dataFilterByArea.slice(start, end);
     },
     totalPage() {
-      return (this.dataFilterByArea.length/this.slicePage);
+      return Math.ceil(this.dataRow.length/this.pageCount);
     },
   },
   methods: {
@@ -113,6 +126,12 @@ export default {
 </script>
 
 <style lang="sass">
+.outerContainer
+  width: 100%
+
+.pageSlice, .pagination
+  max-width: 100%
+
 table
   text-align: left
 
