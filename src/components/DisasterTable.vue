@@ -16,7 +16,7 @@
          :class="{opened:opened.includes(data)}")
         td(v-for="heading in headingsRow")
           | {{ data[heading] }}
-        td.fa.fa-chevron-right
+        td#arrow.fa.fa-chevron-right(v-model="toggleSeen")
       tr.subDescription(v-if="opened.includes(data)")
         td(colspan="5")
           ul
@@ -64,6 +64,15 @@ export default {
       } else {
         this.opened.push(item);
       }
+
+      // const arrow = document.getElementById('arrow');
+      // if (arrow.classList.contains('fa-chevron-right')) {
+      //   arrow.classList.remove('fa-chevron-right');
+      //   arrow.classList.add('fa-chevron-down');
+      // } else {
+      //   arrow.classList.add('fa-chevron-right');
+      //   arrow.classList.remove('fa-chevron-down')
+      // }
     },
     CaseIfComplete(result) {
       if (result == 'true') {
