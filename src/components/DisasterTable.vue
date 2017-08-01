@@ -37,7 +37,7 @@ export default {
       if ( key == 'CaseTime') return key='日期時間';
       if ( key == 'CaseLocationDistrict') return key='區域名稱';
       if ( key == 'CaseLocationDescription') return key='詳細地點';
-      if ( key == 'Name') return key='災害種類';
+      if ( key == 'PName') return key='災害種類';
     },
     toggleRow(item) {
       // this.toggleSeen = !this.toggleSeen;
@@ -75,7 +75,7 @@ table
   tbody tr
     &:hover
       cursor: pointer
-      background-color: rgba(#ddd, 0.3)
+      background-color: rgba(#ffce85, 0.2)
       color: #000
       .fa.fa-chevron-right
         color: #333
@@ -84,11 +84,6 @@ table
     color: #aaa
 
 .opened
-  background-color: #ffce85
-  // tbody tr
-  //   &:hover
-  //     background-color: transparent
-
-
-
+  background-color: rgba(#ffce85, 0.2)
+  color: #000
 </style>

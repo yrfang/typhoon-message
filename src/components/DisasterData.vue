@@ -67,7 +67,7 @@ export default {
         }],
       // selectedArea: '',
       disasterData: [],
-      headings: ["CaseTime", "CaseLocationDistrict", "CaseLocationDescription", "Name"
+      headings: ["CaseTime", "CaseLocationDistrict", "CaseLocationDescription", "PName"
     ],
     };
   },
