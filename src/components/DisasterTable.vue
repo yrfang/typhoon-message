@@ -50,7 +50,6 @@ export default {
       subDescription: ["Name", "CaseDescription", "CaseCommunicatorUnit", "CaseComplete"],
       pageIndex: 0,
       pageCount: 10,
-      // pageLength: [10, 20, 50, 100],
       pageLength: [
         { text: "10", value: 10 },
         { text: "20 筆/頁", value: 20 },

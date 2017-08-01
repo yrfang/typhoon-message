@@ -29,5 +29,7 @@ npm install sass-loader node-sass --save-dev
 
 npm install --save axios vue-axios
 
+npm install --save bootstrap-vue
+
 npm install --save font-awesome
 ```
