@@ -5,6 +5,10 @@
          v-model="selectedArea")
     option(v-for="area in areasName") {{ area.value }}
   br
+  select.form-control(v-model="pageCount")
+    option(v-for="page in pageLength", v-bind:value="page.value") {{page.value}} 筆/頁
+  span selected: {{ pageCount }}
+  br
   table.table
     thead
       tr
@@ -44,18 +48,33 @@ export default {
       toggleSeen: false,
       opened: [],
       subDescription: ["Name", "CaseDescription", "CaseCommunicatorUnit", "CaseComplete"],
+      pageIndex: 0,
+      pageCount: 10,
+      // pageLength: [10, 20, 50, 100],
+      pageLength: [
+        { text: "10", value: 10 },
+        { text: "20 筆/頁", value: 20 },
+        { text: "50 筆/頁", value: 50 },
+        { text: "100 筆/頁", value: 100 },
+      ],
     }
   },
   computed: {
     dataFilterByArea() {
-      const vobj = this;
-      // const dataFilter = vobj.dataRow;
-      const selectedArea = vobj.selectedArea;
-      return vobj.dataRow.filter((data) => {
+      const selectedArea = this.selectedArea;
+      return this.dataRow.filter((data) => {
         if (selectedArea == '全部') return data;
 
-        if (data.CaseLocationDistrict.indexOf(selectedArea) > -1) return vobj.dataRow;
+        if (data.CaseLocationDistrict.indexOf(selectedArea) > -1) return this.dataRow;
       });
+    },
+    slicePage() {
+      let start = this.pageIndex * this.pageCount;
+      let end = (this.pageIndex+1) * this.pageCount;
+      return this.dataFilterByArea.slice(start, end);
+    },
+    totalPage() {
+      return (this.dataFilterByArea.length/this.slicePage);
     },
   },
   methods: {
