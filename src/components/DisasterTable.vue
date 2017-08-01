@@ -3,7 +3,7 @@
   select.form-control(id="area-select",
          placeholder="請選擇行政區",
          v-model="selectedArea")
-    option(v-for="area in areasTable") {{ area.value }}
+    option(v-for="area in areasName") {{ area.value }}
   br
   table.table
     thead
@@ -11,7 +11,7 @@
         th(v-for="heading in headingsRow")
           | {{ changeRowName(heading) }}
         th
-    tbody(v-for="(data,id) in dataRow")
+    tbody(v-for="(data,id) in dataFilterByArea")
       tr.main(@click="toggleRow(data)",
          :class="{opened:opened.includes(data)}")
         td(v-for="heading in headingsRow")
@@ -37,7 +37,7 @@
 <script>
 export default {
   name: 'disasterTable',
-  props: ['dataRow', 'headingsRow', 'areasTable', 'id'],
+  props: ['dataRow', 'headingsRow', 'areasName', 'id'],
   data() {
     return {
       selectedArea: '全部',
@@ -47,7 +47,16 @@ export default {
     }
   },
   computed: {
+    dataFilterByArea() {
+      const vobj = this;
+      // const dataFilter = vobj.dataRow;
+      const selectedArea = vobj.selectedArea;
+      return vobj.dataRow.filter((data) => {
+        if (selectedArea == '全部') return data;
 
+        if (data.CaseLocationDistrict.indexOf(selectedArea) > -1) return vobj.dataRow;
+      });
+    },
   },
   methods: {
     changeRowName(key) {
@@ -103,7 +112,7 @@ table
     padding-right: 20px
 
   thead tr
-    background-color: rgba(#ddd, 0.3)
+    background-color: rgba(#ddd, 0.5)
 
   tbody tr.main
     &:hover
@@ -121,6 +130,7 @@ table
   color: #000
 
 .subDescription
+  background-color: rgba(#eee, 0.2)
   ul
     margin: 0px
     padding: 0px

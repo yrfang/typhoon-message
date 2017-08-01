@@ -9,7 +9,7 @@
   .row
     DisasterTable(:dataRow="disasterData",
                   :headingsRow="headings",
-                  :areasTable="areas",
+                  :areasName="areas",
                   :key="disasterData.id")
 </template>
 
