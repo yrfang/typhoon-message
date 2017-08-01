@@ -19,3 +19,15 @@ npm run build --report
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## npm install
+
+```bash
+npm install pug --save-dev
+
+npm install sass-loader node-sass --save-dev
+
+npm install --save axios vue-axios
+
+npm install --save font-awesome
+```

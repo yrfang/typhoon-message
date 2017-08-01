@@ -50,12 +50,13 @@ table
     padding-right: 20px
 
   thead tr
-    background-color: rgba(#aaa, 0.6)
+    background-color: rgba(#ddd, 0.3)
 
   tbody tr
     &:hover
       cursor: pointer
-      background-color: rgba(#aaa, 0.3)
+      background-color: rgba(#ddd, 0.3)
+      color: #000
       .fa.fa-chevron-right
         color: #333
 
