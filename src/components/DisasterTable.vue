@@ -1,5 +1,8 @@
 <template lang="pug">
 .DisasterTable
+  select.form-control(id="area-select",
+         placeholder="請選擇行政區", )
+    option(v-for="area in areasTable") {{ area.value }}
   table.table
     thead
       tr
@@ -14,7 +17,7 @@
 <script>
 export default {
   name: 'disasterTable',
-  props: ['dataRow', 'headingsRow'],
+  props: ['dataRow', 'headingsRow', 'areasTable'],
   methods: {
     changeRowName(key) {
       if ( key == 'CaseTime') return key='日期時間';

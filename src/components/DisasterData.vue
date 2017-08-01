@@ -6,7 +6,8 @@
       a 災情位置
   .row
     h4.col-xs-12 災害統計({{ dataCount }})
-    DisasterTable(:dataRow="disasterData", :headingsRow="headings")
+  .row
+    DisasterTable(:dataRow="disasterData", :headingsRow="headings", :areasTable="areas")
 </template>
 
 <script>
