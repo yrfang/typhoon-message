@@ -12,13 +12,26 @@
           | {{ changeRowName(heading) }}
         th
     tbody(v-for="(data,id) in dataRow")
-      tr(@click="toggleRow(data)",
+      tr.main(@click="toggleRow(data)",
          :class="{opened:opened.includes(data)}")
         td(v-for="heading in headingsRow")
           | {{ data[heading] }}
         td.fa.fa-chevron-right
-      tr(v-if="opened.includes(data)")
-        td(colspan="5") ON!
+      tr.subDescription(v-if="opened.includes(data)")
+        td(colspan="5")
+          ul
+            li
+              span.sub 災情細項類別
+              span ： {{ data.Name }}
+            li
+              span.sub 災情描述
+              span ： {{ data.CaseDescription }}
+            li
+              span.sub 災情通報單位
+              span ： {{ data.CaseCommunicatorUnit }}
+            li
+              span.sub 是否已經處理完畢
+              span ： {{ CaseIfComplete(data.CaseComplete) }}
 </template>
 
 <script>
@@ -30,14 +43,18 @@ export default {
       selectedArea: '全部',
       toggleSeen: false,
       opened: [],
+      subDescription: ["Name", "CaseDescription", "CaseCommunicatorUnit", "CaseComplete"],
     }
+  },
+  computed: {
+
   },
   methods: {
     changeRowName(key) {
       if ( key == 'CaseTime') return key='日期時間';
       if ( key == 'CaseLocationDistrict') return key='區域名稱';
       if ( key == 'CaseLocationDescription') return key='詳細地點';
-      if ( key == 'PName') return key='災害種類';
+      if ( key == 'PName') return key='災情分類';
     },
     toggleRow(item) {
       // this.toggleSeen = !this.toggleSeen;
@@ -46,6 +63,13 @@ export default {
         this.opened.splice(index, 1);
       } else {
         this.opened.push(item);
+      }
+    },
+    CaseIfComplete(result) {
+      if (result == 'true') {
+        return result='是';
+      } else {
+        return result='否';
       }
     },
   }
@@ -72,7 +96,7 @@ table
   thead tr
     background-color: rgba(#ddd, 0.3)
 
-  tbody tr
+  tbody tr.main
     &:hover
       cursor: pointer
       background-color: rgba(#ffce85, 0.2)
@@ -86,4 +110,16 @@ table
 .opened
   background-color: rgba(#ffce85, 0.2)
   color: #000
+
+.subDescription
+  ul
+    margin: 0px
+    padding: 0px
+    li
+      list-style: none
+      font-size: 16px
+      padding: 10px
+      .sub
+        text-decoration: underline
+        font-weight: 600
 </style>
