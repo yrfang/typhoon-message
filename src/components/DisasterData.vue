@@ -5,7 +5,7 @@
       a 災情更新
       a 災情位置
   .row
-    h4.col-xs-12 災害統計({{ dataCount }})
+    h5.col-xs-12 災害統計({{ dataCount }})
   .row
     DisasterTable(:dataRow="disasterData", :headingsRow="headings", :areasTable="areas")
 </template>
@@ -64,7 +64,7 @@ export default {
         }],
       selectedValue: '',
       disasterData: [],
-      headings: ["CaseTime", "CaseLocationDistrict", "CaseLocationDescription", "CaseDescription"
+      headings: ["CaseTime", "CaseLocationDistrict", "CaseLocationDescription", "Name"
     ],
     };
   },
