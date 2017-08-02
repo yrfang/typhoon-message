@@ -17,12 +17,11 @@
           span.sr-only Previous
       li.page-item(v-for="(page,id) in totalPage", @click="pageClick(page)")
         a.page-link(href='#') {{ page }}
-      li.page-item(v-if="totalPage > 9", @click="paginate(1)")
+      li.page-item(@click="paginate(1)", v-if="(pageIndex+1)<totalPage")
         a.page-link(href='#', aria-label='Next')
           span(aria-hidden='true') »
           span.sr-only Next
   h5 pageIndex： {{ pageIndex }}
-  h5 {{ minPageIndex}} and {{ maxPageIndex }}
   br
   table.table
     thead
@@ -89,8 +88,6 @@ export default {
         // console.log("no more data!");
         this.pageIndex = 0;
       }
-      // let start = this.pageIndex * this.pageCount;
-      // let end = (this.pageIndex+1) * this.pageCount;
       var start = this.pageIndex * this.pageCount;
       var end = (this.pageIndex+1) * this.pageCount;
       return this.dataFilterByArea.slice(start, end);
