@@ -11,17 +11,18 @@
   //- h5(v-for="page in pageLength") {{ page.value }}
   nav.pageSlice
     ul.pagination
-      li.page-item
+      li.page-item(@click="paginate(-1)")
         a.page-link(href='#', aria-label='Previous')
           span(aria-hidden='true') «
           span.sr-only Previous
       li.page-item(v-for="(page,id) in totalPage", @click="pageClick(page)")
         a.page-link(href='#') {{ page }}
-      li.page-item(v-if="totalPage>10")
+      li.page-item(v-if="totalPage > 9", @click="paginate(1)")
         a.page-link(href='#', aria-label='Next')
           span(aria-hidden='true') »
           span.sr-only Next
   h5 pageIndex： {{ pageIndex }}
+  h5 {{ minPageIndex}} and {{ maxPageIndex }}
   br
   table.table
     thead
@@ -88,14 +89,18 @@ export default {
         // console.log("no more data!");
         this.pageIndex = 0;
       }
-      let start = this.pageIndex * this.pageCount;
-      let end = (this.pageIndex+1) * this.pageCount;
+      // let start = this.pageIndex * this.pageCount;
+      // let end = (this.pageIndex+1) * this.pageCount;
+      var start = this.pageIndex * this.pageCount;
+      var end = (this.pageIndex+1) * this.pageCount;
       return this.dataFilterByArea.slice(start, end);
     },
     totalPage() {
       var totalData = this.dataFilterByArea.length;
       var pageCount = this.pageCount;
       var pages = Math.ceil(totalData/pageCount);
+      if (pages <= 10) return pages;
+      // if (pages > 10) return pages=10;
       return pages;
     },
   },
@@ -134,13 +139,23 @@ export default {
     pageClick(page) {
       return this.pageIndex = page-1;
     },
-    // displayPage(item) {
-    //   if (this.totalPage <= 10) return item;
-    //   // if (this.totalPage >= 10) {
-    //   //   var templateFilterData = this.dataFilterByArea;
-    //   //
-    //   // }
-    // },
+    paginate(num) {
+      if (num == 1) {
+        if (this.pageIndex >= (this.totalPage-1)) {
+          return this.pageIndex = this.totalPage-1;
+        } else {
+          this.pageIndex++
+        }
+      }
+
+      if (num == -1) {
+        if (this.pageIndex <= 0) {
+          return this.pageIndex = 0;
+        } else {
+          this.pageIndex--;
+        }
+      }
+    },
   }
 }
 </script>
