@@ -7,10 +7,12 @@
   .row
     h5.col-xs-12 災害統計({{ dataCount }})
   .row
-    Paginate(:pageCount="262",
-             :page-range="5",
+    Paginate(:page-count="20",
+             :page-range="3",
+             :margin-pages="2",
              :containerClass="'pagination'",
-             :clickHandler="clickCallback")
+             :clickHandler="clickCallback",
+             ref="paginate")
   .row
     DisasterTable(:dataRow="disasterData",
                   :headingsRow="headings",
@@ -79,6 +81,8 @@ export default {
   },
   mounted() {
     this.getData();
+    //this.$refs.paginate.selected = 20;
+    console.log(this.$refs.paginate.selected );
   },
   computed: {
     dataCount() {
@@ -96,7 +100,9 @@ export default {
       }).catch((error) => { console.log(error); });
     },
     clickCallback: function(page) {
+      console.log('hello');
       console.log(page)
+      console.log(this.$refs.paginate.selected);
     },
   }
 }
