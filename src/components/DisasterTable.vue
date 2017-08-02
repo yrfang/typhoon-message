@@ -7,21 +7,7 @@
   br
   select.form-control(v-model="pageCount")
     option(v-for="page in pageLength", v-bind:value="page.value") {{page.value}} 筆/頁
-  h5 selected: {{ pageCount }}
-  //- h5(v-for="page in pageLength") {{ page.value }}
-  nav.pageSlice
-    ul.pagination
-      li.page-item(@click="paginate(-1)")
-        a.page-link(href='#', aria-label='Previous')
-          span(aria-hidden='true') «
-          span.sr-only Previous
-      li.page-item(v-for="(page,id) in totalPage", @click="pageClick(page)")
-        a.page-link(href='#') {{ page }}
-      li.page-item(@click="paginate(1)", v-if="(pageIndex+1)<totalPage")
-        a.page-link(href='#', aria-label='Next')
-          span(aria-hidden='true') »
-          span.sr-only Next
-  h5 pageIndex： {{ pageIndex }}
+  h5 {{ pageCount }}
   br
   table.table
     thead
@@ -29,7 +15,7 @@
         th(v-for="heading in headingsRow")
           | {{ changeRowName(heading) }}
         th
-    tbody(v-for="(data,id) in dataBySliceByPage")
+    tbody(v-for="(data,id) in dataFilterByArea")
       tr.main(@click="toggleRow(data)",
          :class="{opened:opened.includes(data)}")
         td(v-for="heading in headingsRow")
@@ -153,6 +139,13 @@ export default {
         }
       }
     },
+    chageDisplayPage(pageId) {
+      var templateId = [];
+      var dataTotalBySlicePage = this.dataBySlicePage;
+      var min = this.minPageIndex;
+      var max = this.maxPageIndex;
+      templateId = dataTotalBySlicePage.slice(this.data)
+    },
   }
 }
 </script>
@@ -161,8 +154,10 @@ export default {
 .outerContainer
   width: 100%
 
-.pageSlice, .pagination
-  max-width: 100%
+.pageContainer
+  max-width: 800px
+  // li
+  //   display: inline-block
 
 table
   text-align: left
