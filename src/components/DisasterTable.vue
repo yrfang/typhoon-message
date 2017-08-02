@@ -9,15 +9,16 @@
     option(v-for="page in pageLength", v-bind:value="page.value") {{page.value}} 筆/頁
   h5 selected: {{ pageCount }}
   h5 pageIndex(比page少一)： {{ pageIndex }}
+  h5(v-for="page in pageLength") {{ page.value }}
   nav.pageSlice
     ul.pagination
       li.page-item
         a.page-link(href='#', aria-label='Previous')
           span(aria-hidden='true') «
           span.sr-only Previous
-      li.page-item(v-for="page in totalPage", @click="pageIndex=page-1")
+      li.page-item(v-for="page in displayPage", @click="pageIndex=page-1")
         a.page-link(href='#') {{ page }}
-      li.page-item
+      li.page-item(v-if="totalPage>10")
         a.page-link(href='#', aria-label='Next')
           span(aria-hidden='true') »
           span.sr-only Next
@@ -69,6 +70,8 @@ export default {
         { text: "50 筆/頁", value: 50 },
         { text: "100 筆/頁", value: 100 },
       ],
+      minPageIndex: 0,
+      maxPageIndex: 10,
     }
   },
   computed: {
@@ -81,12 +84,19 @@ export default {
       });
     },
     dataBySlicePage() {
-      let start = this.pageIndex * this.pageCount;
-      let end = (this.pageIndex+1) * this.pageCount;
+      // let start = this.pageIndex * this.pageCount;
+      // let end = (this.pageIndex+1) * this.pageCount;
+      var start = this.minPageIndex;
+      var end = this.maxPageIndex;
       return this.dataFilterByArea.slice(start, end);
     },
     totalPage() {
       return Math.ceil(this.dataFilterByArea.length/this.pageCount);
+      // return this.dataBySlicePage.length;
+    },
+    displayPage() {
+      if (this.totalPage <= 10) return this.totalPage;
+      if (this.totalPage > 10) return this.dataBySlicePage.length;
     },
   },
   methods: {
