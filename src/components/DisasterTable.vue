@@ -7,15 +7,15 @@
   br
   select.form-control(v-model="pageCount")
     option(v-for="page in pageLength", v-bind:value="page.value") {{page.value}} 筆/頁
-  span selected: {{ pageCount }}
-  br
+  h5 selected: {{ pageCount }}
+  h5 pageIndex(比page少一)： {{ pageIndex }}
   nav.pageSlice
     ul.pagination
       li.page-item
         a.page-link(href='#', aria-label='Previous')
           span(aria-hidden='true') «
           span.sr-only Previous
-      li.page-item(v-for="page in totalPage")
+      li.page-item(v-for="page in totalPage", @click="pageIndex=page-1")
         a.page-link(href='#') {{ page }}
       li.page-item
         a.page-link(href='#', aria-label='Next')
@@ -28,7 +28,7 @@
         th(v-for="heading in headingsRow")
           | {{ changeRowName(heading) }}
         th
-    tbody(v-for="(data,id) in dataFilterByArea")
+    tbody(v-for="(data,id) in dataBySlicePage")
       tr.main(@click="toggleRow(data)",
          :class="{opened:opened.includes(data)}")
         td(v-for="heading in headingsRow")
@@ -80,13 +80,13 @@ export default {
         if (data.CaseLocationDistrict.indexOf(selectedArea) > -1) return this.dataRow;
       });
     },
-    slicePage() {
+    dataBySlicePage() {
       let start = this.pageIndex * this.pageCount;
       let end = (this.pageIndex+1) * this.pageCount;
       return this.dataFilterByArea.slice(start, end);
     },
     totalPage() {
-      return Math.ceil(this.dataRow.length/this.pageCount);
+      return Math.ceil(this.dataFilterByArea.length/this.pageCount);
     },
   },
   methods: {
@@ -120,6 +120,9 @@ export default {
       } else {
         return result='否';
       }
+    },
+    selectAreaKey(e) {
+      this.pageIndex = 0;
     },
   }
 }
