@@ -8,20 +8,20 @@
   select.form-control(v-model="pageCount")
     option(v-for="page in pageLength", v-bind:value="page.value") {{page.value}} 筆/頁
   h5 selected: {{ pageCount }}
-  h5 pageIndex(比page少一)： {{ pageIndex }}
-  h5(v-for="page in pageLength") {{ page.value }}
+  //- h5(v-for="page in pageLength") {{ page.value }}
   nav.pageSlice
     ul.pagination
       li.page-item
         a.page-link(href='#', aria-label='Previous')
           span(aria-hidden='true') «
           span.sr-only Previous
-      li.page-item(v-for="page in displayPage", @click="pageIndex=page-1")
+      li.page-item(v-for="(page,id) in totalPage", @click="pageClick(page)")
         a.page-link(href='#') {{ page }}
       li.page-item(v-if="totalPage>10")
         a.page-link(href='#', aria-label='Next')
           span(aria-hidden='true') »
           span.sr-only Next
+  h5 pageIndex： {{ pageIndex }}
   br
   table.table
     thead
@@ -29,7 +29,7 @@
         th(v-for="heading in headingsRow")
           | {{ changeRowName(heading) }}
         th
-    tbody(v-for="(data,id) in dataBySlicePage")
+    tbody(v-for="(data,id) in dataBySliceByPage")
       tr.main(@click="toggleRow(data)",
          :class="{opened:opened.includes(data)}")
         td(v-for="heading in headingsRow")
@@ -83,20 +83,20 @@ export default {
         if (data.CaseLocationDistrict.indexOf(selectedArea) > -1) return this.dataRow;
       });
     },
-    dataBySlicePage() {
-      // let start = this.pageIndex * this.pageCount;
-      // let end = (this.pageIndex+1) * this.pageCount;
-      var start = this.minPageIndex;
-      var end = this.maxPageIndex;
+    dataBySliceByPage() {
+      if (this.pageIndex >= this.totalPage) {
+        // console.log("no more data!");
+        this.pageIndex = 0;
+      }
+      let start = this.pageIndex * this.pageCount;
+      let end = (this.pageIndex+1) * this.pageCount;
       return this.dataFilterByArea.slice(start, end);
     },
     totalPage() {
-      return Math.ceil(this.dataFilterByArea.length/this.pageCount);
-      // return this.dataBySlicePage.length;
-    },
-    displayPage() {
-      if (this.totalPage <= 10) return this.totalPage;
-      if (this.totalPage > 10) return this.dataBySlicePage.length;
+      var totalData = this.dataFilterByArea.length;
+      var pageCount = this.pageCount;
+      var pages = Math.ceil(totalData/pageCount);
+      return pages;
     },
   },
   methods: {
@@ -131,9 +131,16 @@ export default {
         return result='否';
       }
     },
-    selectAreaKey(e) {
-      this.pageIndex = 0;
+    pageClick(page) {
+      return this.pageIndex = page-1;
     },
+    // displayPage(item) {
+    //   if (this.totalPage <= 10) return item;
+    //   // if (this.totalPage >= 10) {
+    //   //   var templateFilterData = this.dataFilterByArea;
+    //   //
+    //   // }
+    // },
   }
 }
 </script>
