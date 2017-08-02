@@ -7,6 +7,11 @@
   .row
     h5.col-xs-12 災害統計({{ dataCount }})
   .row
+    Paginate(:pageCount="262",
+             :page-range="5",
+             :containerClass="'pagination'",
+             :clickHandler="clickCallback")
+  .row
     DisasterTable(:dataRow="disasterData",
                   :headingsRow="headings",
                   :areasName="areas",
@@ -16,12 +21,14 @@
 <script>
 import axios from 'axios';
 
+import Paginate from 'vuejs-paginate';
+
 import DisasterTable from '@/components/DisasterTable';
 
 const DisasterApiUrl = "https://tcgbusfs.blob.core.windows.net/blobfs/GetDisasterSummary.json";
 
 export default {
-  components: { DisasterTable },
+  components: { DisasterTable, Paginate },
   data() {
     return {
       areas: [
@@ -87,6 +94,9 @@ export default {
         this.disasterData = response.data.DataSet['diffgr:diffgram'].NewDataSet.CASE_SUMMARY;
         console.log(this.disasterData);
       }).catch((error) => { console.log(error); });
+    },
+    clickCallback: function(page) {
+      console.log(page)
     },
   }
 }

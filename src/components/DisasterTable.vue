@@ -39,6 +39,8 @@
 </template>
 
 <script>
+// const Paginate = require('vuejs-paginate');
+
 export default {
   name: 'disasterTable',
   props: ['dataRow', 'headingsRow', 'areasName', 'id'],
