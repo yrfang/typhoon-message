@@ -13,6 +13,7 @@ Vue.use(BootstrapVue);
 
 import DisasterData from '@/components/DisasterData';
 import DisasterTable from '@/components/DisasterTable';
+import Pagination from '@/components/Pagination';
 
 export default new Router({
   routes: [
