@@ -5,41 +5,38 @@
       tr
         th(v-for="heading in headings")
           | {{ changeRowName(heading) }}
+        th
     tbody(v-for="(data,id) in dataFilterByArea")
-      tr
+      tr.main(@click="toggleRow(data)",
+              :class="{ opened:opened.includes(data) }")
         td(v-for="heading in headings")
           | {{ data[heading] }}
-    //- tbody(v-for="(data,id) in dataFilterByArea")
-    //-   tr.main(@click="toggleRow(data)",
-    //-      :class="{opened:opened.includes(data)}")
-    //-     td(v-for="heading in headingsRow")
-    //-       | {{ data[heading] }}
-    //-     td#arrow.fa.fa-chevron-right(v-model="toggleSeen")
-      //- tr.subDescription(v-if="opened.includes(data)")
-      //-   td(colspan="5")
-      //-     ul
-      //-       li
-      //-         span.sub 災情細項類別
-      //-         span ： {{ data.Name }}
-      //-       li
-      //-         span.sub 災情描述
-      //-         span ： {{ data.CaseDescription }}
-      //-       li
-      //-         span.sub 災情通報單位
-      //-         span ： {{ data.CaseCommunicatorUnit }}
-      //-       li
-      //-         span.sub 是否已經處理完畢
-      //-         span ： {{ CaseIfComplete(data.CaseComplete) }}
+        td#arrow.fa.fa-chevron-right(v-model="toggleSeen")
+      tr.subDescription(v-if="opened.includes(data)")
+        td(colspan="5")
+          ul
+            li
+              span.sub 災情細項類別
+              span ： {{ data.Name }}
+            li
+              span.sub 災情描述
+              span ： {{ data.CaseDescription }}
+            li
+              span.sub 災情通報單位
+              span ： {{ data.CaseCommunicatorUnit }}
+            li
+              span.sub 是否已經處理完畢
+              span ： {{ CaseIfComplete(data.CaseComplete) }}
 </template>
 
 <script>
 export default {
   name: 'disasterTable',
-  props: ['headings', 'selectedArea', 'dataFilterByArea',],
+  props: ['headings', 'dataFilterByArea'],
   data() {
     return {
       opened: [],
-      subDescription: ["Name", "CaseDescription", "CaseCommunicatorUnit", "CaseComplete"],
+      toggleSeen: false,
       pageIndex: 0,
       pageCount: 10,
     }
@@ -69,9 +66,6 @@ export default {
       } else {
         return result='否';
       }
-    },
-    pageClick(page) {
-      return this.pageIndex = page-1;
     },
   }
 }

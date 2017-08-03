@@ -1,9 +1,5 @@
 <template lang="pug">
 .DisasterData.tableList
-  .row.navInformation
-    .col-xs-12
-      a 災情更新
-      a 災情位置
   .row
     select.form-control(id="area-select",
            placeholder="請選擇行政區",
@@ -65,12 +61,5 @@ export default {
 .tableList
   margin-left: auto
   margin-right: auto
-  padding: 20px
-
-  .row.navInformation
-    margin-bottom: 20px
-
-    a
-      margin-right: 10px
-      font-size: 18px
+  padding: 10px
 </style>
