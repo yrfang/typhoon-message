@@ -3,11 +3,11 @@
   select.form-control(v-model="pageCount")
     option(v-for="length in pageLength",
            v-bind:value="length.value") {{length.text}}
-  h5 {{ totalPage }}
+  h5 {{ pagination.currentPage }}
   br
   nav.paginationBar
     ul
-      li(v-for="page in totalPage",
+      li(v-for="page in pagination.sliceTotalPage",
          @click="selectPage(page)",)
         .button {{ page }}
 </template>
@@ -31,6 +31,9 @@ export default {
         sliceTotalPage: [],
       },
     }
+  },
+  mounted() {
+    this.selectPage(1);
   },
   computed: {
     totalPage() {
@@ -62,7 +65,7 @@ export default {
       for (var i=start; i<=end; i++) {
         this.pagination.sliceTotalPage.push(i);
       }
-      console.log(this.pagination.sliceTotalPage);
+      // console.log(this.pagination.sliceTotalPage);
     }
   },
 }
