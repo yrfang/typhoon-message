@@ -5,76 +5,31 @@
       a 災情更新
       a 災情位置
   .row
-    h5.col-xs-12 災害統計({{ dataCount }})
+    select.form-control(id="area-select",
+           placeholder="請選擇行政區",
+           v-model="selectedArea")
+      option(v-for="area in areas") {{ area }}
+  br
   .row
-    Paginate(:page-count="20",
-             :page-range="3",
-             :margin-pages="2",
-             :containerClass="'pagination'",
-             :clickHandler="clickCallback",
-             ref="paginate")
-  .row
-    DisasterTable(:dataRow="disasterData",
-                  :headingsRow="headings",
-                  :areasName="areas",
-                  :key="disasterData.id")
+    DisasterTable(:headings="headings",
+                  :dataFilterByArea="dataFilterByArea",)
 </template>
 
 <script>
 import axios from 'axios';
 
-import Paginate from 'vuejs-paginate';
+// import Paginate from 'vuejs-paginate';
 
 import DisasterTable from '@/components/DisasterTable';
 
 const DisasterApiUrl = "https://tcgbusfs.blob.core.windows.net/blobfs/GetDisasterSummary.json";
 
 export default {
-  components: { DisasterTable, Paginate },
+  components: { DisasterTable },
   data() {
     return {
-      areas: [
-        {
-          value: '全部',
-          label: '全部',
-        }, {
-          value: '萬華區',
-          label: '萬華區',
-        }, {
-          value: '中正區',
-          label: '中正區',
-        }, {
-          value: '大同區',
-          label: '大同區',
-        }, {
-          value: '中山區',
-          label: '中山區',
-        }, {
-          value: '大安區',
-          label: '大安區',
-        }, {
-          value: '南港區',
-          label: '南港區',
-        }, {
-          value: '文山區',
-          label: '文山區',
-        }, {
-          value: '松山區',
-          label: '松山區',
-        }, {
-          value: '信義區',
-          label: '信義區',
-        }, {
-          value: '士林區',
-          label: '士林區',
-        }, {
-          value: '北投區',
-          label: '北投區',
-        }, {
-          value: '內湖區',
-          label: '內湖區',
-        }],
-      // selectedArea: '',
+      areas: ['全部','萬華區','中正區','大同區','中山區','大安區','南港區','文山區','松山區','信義區','士林區','北投區','內湖區'],
+      selectedArea: '全部',
       disasterData: [],
       headings: ["CaseTime", "CaseLocationDistrict", "CaseLocationDescription", "PName"],
     };
@@ -82,27 +37,25 @@ export default {
   mounted() {
     this.getData();
     //this.$refs.paginate.selected = 20;
-    console.log(this.$refs.paginate.selected );
+    // console.log(this.$refs.paginate.selected );
   },
   computed: {
-    dataCount() {
-      return this.disasterData.length;
+    dataFilterByArea() {
+      const selectedArea = this.selectedArea;
+      return this.disasterData.filter((data) => {
+        if (selectedArea == '全部') return data;
+        if (data.CaseLocationDistrict.indexOf(selectedArea) > -1) return this.disasterData;
+      });
     }
   },
   methods: {
     getData() {
       axios.get(DisasterApiUrl).then((response) => {
         // console.log(response.data);
-
         // JSON responses are automatically parsed.
         this.disasterData = response.data.DataSet['diffgr:diffgram'].NewDataSet.CASE_SUMMARY;
         console.log(this.disasterData);
       }).catch((error) => { console.log(error); });
-    },
-    clickCallback: function(page) {
-      console.log('hello');
-      console.log(page)
-      console.log(this.$refs.paginate.selected);
     },
   }
 }
