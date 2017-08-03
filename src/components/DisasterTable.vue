@@ -37,8 +37,6 @@ export default {
     return {
       opened: [],
       toggleSeen: false,
-      pageIndex: 0,
-      pageCount: 10,
     }
   },
   computed: {
