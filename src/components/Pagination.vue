@@ -3,7 +3,7 @@
   select.form-control(v-model="pageCount")
     option(v-for="length in pageLength",
            v-bind:value="length.value") {{length.text}}
-  h5 {{ pagination.currentPage }}
+  h5 {{ pagination.sliceTotalPage[4] }}
   br
   nav.paginationBar
     ul
@@ -61,11 +61,18 @@ export default {
         end = this.pagination.currentPage + 2;
       }
 
+      if (start < 1) start = 1;
+      if (end > totalPage) end = totalPage;
+
       this.pagination.sliceTotalPage = [];
       for (var i=start; i<=end; i++) {
         this.pagination.sliceTotalPage.push(i);
       }
       // console.log(this.pagination.sliceTotalPage);
+
+      var dataStart = (this.pagination.currentPage-1) * this.pageCount;
+      var dataEnd = (this.pagination.currentPage) * this.pageCount;
+      this.dataFilterByArea.slice(dataStart, dataEnd);
     }
   },
 }
