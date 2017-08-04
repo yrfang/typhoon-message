@@ -3,7 +3,7 @@
   .row
     .alert.alert-info
       p 防災災情及相關諮詢電話：87863119分機8900~8907
-      //- p 目前尚未處理完成的災情：{{ dataUncompleteCount }} 件
+      p 目前尚未處理完成的災情：{{ dataUncompleteCount }} 件
   .row
     select.col-xs-12.col-md-6.selectedArea(v-model="selectedArea")
       option(v-for="area in areas") {{ area }}
@@ -34,6 +34,7 @@ export default {
       selectedArea: '全部',
       disasterData: [],
       headings: ["CaseTime", "CaseLocationDistrict", "CaseLocationDescription", "PName"],
+      caseCount: 0,
       pageLength: [
         { text: "20 筆/頁", value: 20},
         { text: "30 筆/頁", value: 30},
@@ -60,9 +61,6 @@ export default {
         if (data.CaseLocationDistrict.indexOf(selectedArea) > -1) return this.disasterData;
       });
     },
-    dataUncompleteCount() {
-      return this.dataFilterByArea.CaseComplete;
-    },
     totalPage() {
       return Math.ceil(this.dataFilterByArea.length/this.pagination.pageCount);
     },
@@ -74,6 +72,13 @@ export default {
       var dataStart = (this.pagination.currentPage-1) * this.pagination.pageCount;
       var dataEnd = (this.pagination.currentPage) * this.pagination.pageCount;
       return this.dataFilterByArea.slice(dataStart, dataEnd);
+    },
+    dataUncompleteCount() {
+      this.caseCount = 0;
+      for (var i=0; i<this.dataFilterByArea.length; i++) {
+        if (this.dataFilterByArea[i].CaseComplete == 'false')
+        return this.caseCount += 1;
+      }
     },
   },
   methods: {
