@@ -1,10 +1,6 @@
 <template lang="pug">
 .Pagination
   .row
-    select.col-xs-12.col-md-6.seletedPage(v-model="pagination.pageCount")
-      option(v-for="length in pageLength",
-             v-bind:value="length.value") {{length.text}}
-  .row
     nav.paginationBar.col-xs-12
       ul
         li(@click="selectPage(1)",
@@ -82,13 +78,6 @@ export default {
 </script>
 
 <style lang="sass">
-select.seletedPage
-  height: 40px
-  padding: 5px
-  margin-top: 10px
-  margin-bottom: 20px
-  border: solid 1px #aaa
-
 .paginationBar
   ul
     margin: 0px

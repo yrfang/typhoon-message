@@ -1,12 +1,15 @@
 <template lang="pug">
 .DisasterData.tableList
   .row
-    .alert.alert-info
+    .alert.alert-info.col-xs-12
       p 防災災情及相關諮詢電話：87863119分機8900~8907
       p 目前尚未處理完成的災情：{{ dataUncompleteCount }} 件
   .row
     select.col-xs-12.col-md-6.selectedArea(v-model="selectedArea")
       option(v-for="area in areas") {{ area }}
+    select.col-xs-12.col-md-6.seletedPage(v-model="pagination.pageCount")
+      option(v-for="length in pageLength",
+             v-bind:value="length.value") {{length.text}}
   Pagination(:dataFilterByArea="dataFilterByArea",
              :pageLength="pageLength",
              :pagination="pagination",
@@ -36,15 +39,15 @@ export default {
       headings: ["CaseTime", "CaseLocationDistrict", "CaseLocationDescription", "PName"],
       caseCount: 0,
       pageLength: [
+        { text: "10 筆/頁", value: 10},
         { text: "20 筆/頁", value: 20},
-        { text: "30 筆/頁", value: 30},
         { text: "50 筆/頁", value: 50},
         { text: "100 筆/頁", value: 100},
       ],
       pagination: {
         range: 5,
         currentPage: 1,
-        pageCount: 20,
+        pageCount: 10,
         sliceTotalPage: [],
       },
     };
@@ -79,6 +82,7 @@ export default {
         if (this.dataFilterByArea[i].CaseComplete == 'false')
         return this.caseCount += 1;
       }
+      return this.caseCount;
     },
   },
   methods: {
@@ -112,6 +116,15 @@ select.selectedArea
   padding: 5px
   border: solid 1px #aaa
 
+select.seletedPage
+  height: 40px
+  padding: 5px
+  // margin-top: 10px
+  margin-bottom: 20px
+  border: solid 1px #aaa
+
+.alert-info
+  width: 100%
 .alert-info > p
   text-align: left
   margin: 0px

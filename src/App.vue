@@ -4,7 +4,6 @@
       <h5 class="col-xs-12.title">台北市颱風災情最新動態</h5>
       <span class="col-xs-12.subtitle"><a href="https://taipeicity.github.io/eoc_119/" target="_blank">資料來源：台北市</a></span>
     </div>
-    <hr>
     <router-view></router-view>
   </div>
 </template>
@@ -16,6 +15,10 @@ export default {
 </script>
 
 <style>
+* {
+  position: relative;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
