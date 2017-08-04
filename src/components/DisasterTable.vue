@@ -77,6 +77,7 @@ export default {
       var currentPage = this.pagination.currentPage;
       const range = this.pagination.range;
       const totalPage = this.totalPage;
+
       if (currentPage < range-2) {
         start = 1;
         end = start + range - 1;
@@ -99,7 +100,7 @@ export default {
     },
     buildPage() {
       if (this.pagination.currentPage > this.totalPage) {
-        console.log("no more data!");
+        // console.log("no more data!");
         this.pagination.currentPage = 1;
       }
 
@@ -140,11 +141,6 @@ export default {
 <style lang="sass">
 .outerContainer
   width: 100%
-
-.pageContainer
-  max-width: 800px
-  // li
-  //   display: inline-block
 
 table
   text-align: left
