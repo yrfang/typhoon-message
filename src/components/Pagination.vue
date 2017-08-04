@@ -3,23 +3,31 @@
   select.form-control(v-model="pagination.pageCount")
     option(v-for="length in pageLength",
            v-bind:value="length.value") {{length.text}}
+  h5 currentPage: {{ pagination.currentPage }}
   br
   nav.paginationBar
     ul
+      li(@click="selectPage(1)")
+        .button
+          i.fa.fa-angle-double-left
+      li(@click="selectPage(pagination.currentPage-1)")
+        .button
+          i.fa.fa-angle-left
       li(v-for="page in buildPagination",
          @click="selectPage(page)",)
         .button {{ page }}
+      li(@click="selectPage(pagination.currentPage+1)")
+        .button
+          i.fa.fa-angle-right
+      li(@click="selectPage(totalPage)")
+        .button
+          i.fa.fa-angle-double-right
 </template>
 
 <script>
 export default {
   name: 'pagination',
   props: ['dataFilterByArea', 'pageLength', 'pagination', 'totalPage'],
-  data() {
-    return {
-
-    }
-  },
   mounted() {
     this.selectPage(1);
   },
@@ -54,7 +62,15 @@ export default {
   },
   methods: {
     selectPage(page) {
+      // console.log(page);
       this.pagination.currentPage = page;
+
+      if (this.pagination.currentPage == 0) {
+        this.pagination.currentPage = 1;
+      }
+      if (this.pagination.currentPage > this.totalPage) {
+        this.pagination.currentPage = this.totalPage;
+      }
     },
   },
 }
@@ -65,16 +81,21 @@ export default {
   ul
     margin: 0px
     padding: 0px
+
     li
       list-style: none
       display: inline-block
       border: solid 1px #777
+      border-radius: 5px
       text-align: center
       cursor: pointer
+      margin-right: 5px
+      box-shadow: 0px 0px 5px rgba(#333, 0.1)
+
       .button
         width: 45px
-        height: initial
-        padding: 8px
-        margin-left: auto
-        margin-right: auto
+        height: 45px
+        padding: 10px
+        font-size: 16px
+        text-algin: center
 </style>
