@@ -1,15 +1,16 @@
 <template lang="pug">
 .DisasterData.tableList
   .row
-    select.form-control(id="area-select",
-           v-model="selectedArea")
-      option(v-for="area in areas") {{ area }}
-  br
+    .alert.alert-info
+      p 防災災情及相關諮詢電話：87863119分機8900~8907
+      //- p 目前尚未處理完成的災情：{{ dataUncompleteCount }} 件
   .row
-    Pagination(:dataFilterByArea="dataFilterByArea",
-               :pageLength="pageLength",
-               :pagination="pagination",
-               :totalPage="totalPage",)
+    select.col-xs-12.col-md-6.selectedArea(v-model="selectedArea")
+      option(v-for="area in areas") {{ area }}
+  Pagination(:dataFilterByArea="dataFilterByArea",
+             :pageLength="pageLength",
+             :pagination="pagination",
+             :totalPage="totalPage",)
   br
   .row
     DisasterTable(:headings="headings",
@@ -59,6 +60,9 @@ export default {
         if (data.CaseLocationDistrict.indexOf(selectedArea) > -1) return this.disasterData;
       });
     },
+    dataUncompleteCount() {
+      return this.dataFilterByArea.CaseComplete;
+    },
     totalPage() {
       return Math.ceil(this.dataFilterByArea.length/this.pagination.pageCount);
     },
@@ -83,7 +87,7 @@ export default {
     },
     readyForPage() {
       this.pagination.currentPage=1;
-      
+
       var dataStart = (this.pagination.currentPage-1) * this.pagination.pageCount;
       var dataEnd = (this.pagination.currentPage) * this.pagination.pageCount;
       return this.dataFilterByArea.slice(dataStart, dataEnd);
@@ -97,4 +101,13 @@ export default {
   margin-left: auto
   margin-right: auto
   padding: 10px
+
+select.selectedArea
+  height: 40px
+  padding: 5px
+  border: solid 1px #aaa
+
+.alert-info > p
+  text-align: left
+  margin: 0px
 </style>

@@ -1,31 +1,32 @@
 <template lang="pug">
 .Pagination
-  select.form-control(v-model="pagination.pageCount")
-    option(v-for="length in pageLength",
-           v-bind:value="length.value") {{length.text}}
-  br
-  nav.paginationBar
-    ul
-      li(@click="selectPage(1)",
-         :class="{'is-disable':pagination.currentPage==1}")
-        .button
-          i.fa.fa-angle-double-left
-      li(@click="selectPage(pagination.currentPage-1)",
-         :class="{'is-disable':pagination.currentPage==1}")
-        .button
-          i.fa.fa-angle-left
-      li(v-for="page in buildPagination",
-         @click="selectPage(page)",
-         :class="{'is-info':page==pagination.currentPage}")
-        .button {{ page }}
-      li(@click="selectPage(pagination.currentPage+1)",
-         :class="{'is-disable':pagination.currentPage==totalPage}")
-        .button
-          i.fa.fa-angle-right
-      li(@click="selectPage(totalPage)",
-         :class="{'is-disable':pagination.currentPage==totalPage}")
-        .button
-          i.fa.fa-angle-double-right
+  .row
+    select.col-xs-12.col-md-6.seletedPage(v-model="pagination.pageCount")
+      option(v-for="length in pageLength",
+             v-bind:value="length.value") {{length.text}}
+  .row
+    nav.paginationBar.col-xs-12
+      ul
+        li(@click="selectPage(1)",
+           :class="{'is-disable':pagination.currentPage==1}")
+          .button
+            i.fa.fa-angle-double-left
+        li(@click="selectPage(pagination.currentPage-1)",
+           :class="{'is-disable':pagination.currentPage==1}")
+          .button
+            i.fa.fa-angle-left
+        li(v-for="page in buildPagination",
+           @click="selectPage(page)",
+           :class="{'is-info':page==pagination.currentPage}")
+          .button {{ page }}
+        li(@click="selectPage(pagination.currentPage+1)",
+           :class="{'is-disable':pagination.currentPage==totalPage}")
+          .button
+            i.fa.fa-angle-right
+        li(@click="selectPage(totalPage)",
+           :class="{'is-disable':pagination.currentPage==totalPage}")
+          .button
+            i.fa.fa-angle-double-right
 </template>
 
 <script>
@@ -81,6 +82,13 @@ export default {
 </script>
 
 <style lang="sass">
+select.seletedPage
+  height: 40px
+  padding: 5px
+  margin-top: 10px
+  margin-bottom: 20px
+  border: solid 1px #aaa
+
 .paginationBar
   ul
     margin: 0px
