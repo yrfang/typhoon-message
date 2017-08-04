@@ -1,9 +1,10 @@
 <template lang="pug">
 .Pagination
-  select.form-control(v-model="pageCount")
+  select.form-control(v-model="pagination.pageCount")
     option(v-for="length in pageLength",
            v-bind:value="length.value") {{length.text}}
-  h5 {{ pagination.sliceTotalPage[4] }}
+  h5 current page: {{ pagination.currentPage }}
+  h5 how many data counts: {{ pagination.pageCount }}
   br
   nav.paginationBar
     ul
@@ -24,16 +25,17 @@ export default {
         { text: "50 筆/頁", value: 50},
         { text: "100 筆/頁", value: 100},
       ],
-      pageCount: 20,
       pagination: {
         range: 5,
         currentPage: 1,
+        pageCount: 20,
         sliceTotalPage: [],
       },
     }
   },
   mounted() {
     this.selectPage(1);
+    // buildPage();
   },
   computed: {
     totalPage() {
@@ -43,13 +45,11 @@ export default {
   methods: {
     selectPage(page) {
       this.pagination.currentPage = page;
-
       let start=0;
       let end=0;
       var currentPage = this.pagination.currentPage;
       const range = this.pagination.range;
       const totalPage = this.totalPage;
-
       if (currentPage < range-2) {
         start = 1;
         end = start + range - 1;
@@ -60,20 +60,23 @@ export default {
         start = this.pagination.currentPage - 2;
         end = this.pagination.currentPage + 2;
       }
-
       if (start < 1) start = 1;
       if (end > totalPage) end = totalPage;
-
       this.pagination.sliceTotalPage = [];
       for (var i=start; i<=end; i++) {
         this.pagination.sliceTotalPage.push(i);
       }
-      // console.log(this.pagination.sliceTotalPage);
-
-      var dataStart = (this.pagination.currentPage-1) * this.pageCount;
-      var dataEnd = (this.pagination.currentPage) * this.pageCount;
+      console.log(this.pagination.sliceTotalPage);
+      // var dataStart = (this.pagination.currentPage-1) * this.pageCount;
+      // var dataEnd = (this.pagination.currentPage) * this.pageCount;
+      // this.dataFilterByArea.slice(dataStart, dataEnd);
+    },
+    buildPage() {
+      var dataStart = (this.pagination.currentPage-1) * this.pagination.pageCount;
+      var dataEnd = (this.pagination.currentPage) * this.pagination.pageCount;
       this.dataFilterByArea.slice(dataStart, dataEnd);
-    }
+      console.log(this.dataFilterByArea);
+    },
   },
 }
 </script>

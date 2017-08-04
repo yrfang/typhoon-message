@@ -39,9 +39,6 @@ export default {
       toggleSeen: false,
     }
   },
-  computed: {
-
-  },
   methods: {
     changeRowName(key) {
       if ( key == 'CaseTime') return key='日期時間';
