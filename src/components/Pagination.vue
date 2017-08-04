@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     totalPage() {
-      return Math.ceil(this.dataFilterByArea.length/this.pageCount);
+      return Math.ceil(this.dataFilterByArea.length/this.pagination.pageCount);
     },
   },
   methods: {
