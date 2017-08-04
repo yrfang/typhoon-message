@@ -3,23 +3,27 @@
   select.form-control(v-model="pagination.pageCount")
     option(v-for="length in pageLength",
            v-bind:value="length.value") {{length.text}}
-  h5 currentPage: {{ pagination.currentPage }}
   br
   nav.paginationBar
     ul
-      li(@click="selectPage(1)")
+      li(@click="selectPage(1)",
+         :class="{'is-disable':pagination.currentPage==1}")
         .button
           i.fa.fa-angle-double-left
-      li(@click="selectPage(pagination.currentPage-1)")
+      li(@click="selectPage(pagination.currentPage-1)",
+         :class="{'is-disable':pagination.currentPage==1}")
         .button
           i.fa.fa-angle-left
       li(v-for="page in buildPagination",
-         @click="selectPage(page)",)
+         @click="selectPage(page)",
+         :class="{'is-info':page==pagination.currentPage}")
         .button {{ page }}
-      li(@click="selectPage(pagination.currentPage+1)")
+      li(@click="selectPage(pagination.currentPage+1)",
+         :class="{'is-disable':pagination.currentPage==totalPage}")
         .button
           i.fa.fa-angle-right
-      li(@click="selectPage(totalPage)")
+      li(@click="selectPage(totalPage)",
+         :class="{'is-disable':pagination.currentPage==totalPage}")
         .button
           i.fa.fa-angle-double-right
 </template>
@@ -85,17 +89,26 @@ export default {
     li
       list-style: none
       display: inline-block
-      border: solid 1px #777
+      border: solid 1px rgba(#999,0.5)
       border-radius: 5px
       text-align: center
       cursor: pointer
       margin-right: 5px
-      box-shadow: 0px 0px 5px rgba(#333, 0.1)
 
       .button
-        width: 45px
-        height: 45px
-        padding: 10px
+        width: 40px
+        height: 40px
+        padding-top: 8px
+        padding-bottom: 8px
+        text-align: center
         font-size: 16px
-        text-algin: center
+        font-weight: 900
+
+.is-info
+  background-color: #4074fa
+  color: #fff
+  font-weight: lighter
+
+.is-disable
+  color: rgba(#777,0.2)
 </style>

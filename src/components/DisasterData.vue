@@ -49,6 +49,7 @@ export default {
   },
   mounted() {
     this.getData();
+    this.readyForPage();
   },
   computed: {
     dataFilterByArea() {
@@ -66,7 +67,6 @@ export default {
         // console.log("no more data!");
         this.pagination.currentPage = 1;
       }
-
       var dataStart = (this.pagination.currentPage-1) * this.pagination.pageCount;
       var dataEnd = (this.pagination.currentPage) * this.pagination.pageCount;
       return this.dataFilterByArea.slice(dataStart, dataEnd);
@@ -80,6 +80,13 @@ export default {
         this.disasterData = response.data.DataSet['diffgr:diffgram'].NewDataSet.CASE_SUMMARY;
         // console.log(this.disasterData);
       }).catch((error) => { console.log(error); });
+    },
+    readyForPage() {
+      this.pagination.currentPage=1;
+      
+      var dataStart = (this.pagination.currentPage-1) * this.pagination.pageCount;
+      var dataEnd = (this.pagination.currentPage) * this.pagination.pageCount;
+      return this.dataFilterByArea.slice(dataStart, dataEnd);
     },
   }
 }
