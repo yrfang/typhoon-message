@@ -79,8 +79,9 @@ export default {
     dataUncompleteCount() {
       this.caseCount = 0;
       for (var i=0; i<this.dataFilterByArea.length; i++) {
-        if (this.dataFilterByArea[i].CaseComplete == 'false')
-        return this.caseCount += 1;
+        if (this.dataFilterByArea[i].CaseComplete == 'false') {
+          this.caseCount += 1;
+        }
       }
       return this.caseCount;
     },
