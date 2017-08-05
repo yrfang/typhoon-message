@@ -68,6 +68,8 @@ export default {
 <style lang="sass">
 .outerContainer
   width: 100%
+  padding-left: 20px
+  padding-right: 20px
 
 table
   text-align: left

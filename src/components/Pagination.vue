@@ -78,6 +78,10 @@ export default {
 </script>
 
 <style lang="sass">
+.Pagination
+  padding-left: 20px
+  padding-right: 20px
+
 .paginationBar
   ul
     margin: 0px

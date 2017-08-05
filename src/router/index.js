@@ -14,6 +14,7 @@ Vue.use(BootstrapVue);
 import DisasterData from '@/components/DisasterData';
 import DisasterTable from '@/components/DisasterTable';
 import Pagination from '@/components/Pagination';
+import DisasterMap from '@/components/DisasterMap';
 
 export default new Router({
   routes: [
@@ -21,6 +22,12 @@ export default new Router({
       path: '/',
       name: 'DisasterData',
       component: DisasterData
+    },
+    {
+      path: '/map',
+      name: 'DisasterMap',
+      component: DisasterMap,
+      props: true,
     },
   ]
 });

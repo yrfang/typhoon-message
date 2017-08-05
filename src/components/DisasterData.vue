@@ -1,10 +1,10 @@
 <template lang="pug">
 .DisasterData.tableList
-  .row
+  .row.bar
     .alert.alert-info.col-xs-12
       p 防災災情及相關諮詢電話：87863119分機8900~8907
       p 目前尚未處理完成的災情：{{ dataUncompleteCount }} 件
-  .row
+  .row.bar
     select.col-xs-12.col-md-6.selectedArea(v-model="selectedArea")
       option(v-for="area in areas") {{ area }}
     select.col-xs-12.col-md-6.seletedPage(v-model="pagination.pageCount")
@@ -108,9 +108,16 @@ export default {
 
 <style lang="sass">
 .tableList
-  margin-left: auto
-  margin-right: auto
-  padding: 10px
+  position: fixed
+  top: 80px
+  left: 0px
+  bottom: 0px
+  overflow-x: hidden
+  overflow-y: scroll
+
+.bar
+  padding-left: 20px
+  padding-right: 20px
 
 select.selectedArea
   height: 40px
