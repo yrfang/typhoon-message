@@ -21,13 +21,14 @@ export default new Router({
     {
       path: '/',
       name: 'DisasterData',
-      component: DisasterData
+      component: DisasterData,
+      props: true,
     },
     {
       path: '/map',
       name: 'DisasterMap',
       component: DisasterMap,
-      props: true,
+      // props: true,
     },
   ]
 });

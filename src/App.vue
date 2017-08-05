@@ -1,17 +1,23 @@
-<template>
-  <div id="app">
-    <div id="topBar" class="row">
-      <a class="col-xs-12.title.active">台北市颱風災情最新動態</a>
-      <a class="col-xs-12.title">停電地區</a>
-      <a href="https://taipeicity.github.io/eoc_119/" target="_blank" class="col-xs-12.subtitle">資料來源：台北市</a>
-    </div>
-    <router-view></router-view>
-  </div>
+<template lang="pug">
+#app
+  #topBar.row
+    a.col-xs-6.title(@click="routeToData", v-bind:class="{'active':this.$route.path == '/'}") 台北市颱風災情最新動態
+    a.col-xs-6.title(@click="routeToMap", v-bind:class="{'active':this.$route.path == '/map'}") 停電地區
+    a.col-xs-12.subtitle(href="https://taipeicity.github.io/eoc_119/" target="_blank") 資料來源：台北市
+  router-view
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  methods: {
+    routeToData() {
+      this.$router.push('/');
+    },
+    routeToMap() {
+      this.$router.push('map');
+    },
+  }
 }
 </script>
 
@@ -41,13 +47,14 @@ export default {
   vertical-align: center;
 }
 
-#topBar.title {
+a.title {
   text-align: left;
-  padding-right: 30px;
+  margin-right: 30px;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .active {
-  border-bottom: solid 5px yellow;
+  border-bottom: solid 5px #ffce85;
 }
 </style>
