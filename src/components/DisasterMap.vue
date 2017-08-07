@@ -3,7 +3,7 @@
   .row.bar
     .alert.alert-info.col-xs-12
       p 如有供電問題，請撥打台電客服1911。1040808
-      p 目前停電處尚未： {{ powerInfo.length }} 處
+      p 目前停電處尚未： {{ filteredByArea.length }} 處
   .row.bar
     select.selectedArea(v-model="selectedArea")
       option(v-for="area in areas") {{ area }}
@@ -13,6 +13,7 @@
       p#time 時間：
       p#location 地點：
       p#description 災情描述：
+  //- pre {{ powerCoordinates }}
   #map
 //- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 </template>
@@ -27,63 +28,63 @@ export default {
     return {
       areas: ['全部','萬華區','中正區','大同區','中山區','大安區','南港區','文山區','松山區','信義區','士林區','北投區','內湖區'],
       selectedArea: '全部',
+      filterData: [],
       infos: [],
       coordinates: [],
     }
   },
   mounted() {
     this.getPowerData();
-    // this.mapTest(); //大安區測試
   },
   computed: {
-    powerInfo() {
+    filteredByArea() {
       const selectedArea = this.selectedArea;
-      return this.infos.filter((data) => {
-        if (data.state == 'true') {
-          if (selectedArea == '全部') return data;
-        }
-        if (data.district.indexOf(selectedArea) > -1) return this.infos;
+      return this.filterData.filter((data) => {
+        if (selectedArea == '全部') return data;
+        if (data.CaseLocationDistrict.indexOf(selectedArea) > -1) return this.filterData;
       });
     },
+    powerInfo() {
+      this.infos = [];
+      this.filteredByArea.filter((data) => {
+        if (data.CaseComplete == 'true') return data;
+      }).forEach((data) => {
+        this.infos.push(
+          {
+            time: data.CaseTime,
+            location: data.CaseLocationDescription,
+            description: data.CaseDescription,
+          }
+        );
+      });
+      return this.infos;
+    },
+    powerCoordinates() {
+      this.coordinates = [];
+      this.filteredByArea.filter((data) => {
+        if (data.CaseComplete == 'true') return data;
+      }).forEach((data) => {
+        this.coordinates.push(
+          {
+            latitude: Number(data.Wgs84Y),
+            longitude: Number(data.Wgs84X),
+          }
+        );
+      });
+      return this.coordinates;
+    }
   },
   methods: {
     getPowerData() {
       axios.get(DisasterApiUrl).then((response) => {
         const disasterData = response.data.DataSet['diffgr:diffgram'].NewDataSet.CASE_SUMMARY;
 
-        //infos list
         disasterData.filter((data) => {
           if (data.Name.indexOf('電力停電') > -1) return data;
         }).forEach((data) => {
-          this.infos.push(
-            {
-              time: data.CaseTime,
-              district: data.CaseLocationDistrict,
-              location: data.CaseLocationDescription,
-              description: data.CaseDescription,
-              classification: data.Name,
-              state: data.CaseComplete,
-              infoActive: false,
-            }
-          );
+          this.filterData.push(data);
         });
-        console.log(this.infos);
-
-        //coordinates list
-        disasterData.filter((data) => {
-          if (data.Name.indexOf('電力停電') > -1) return data;
-        }).forEach((data) => {
-          this.coordinates.push(
-            {
-              position: {
-                lat: Number(data.Wgs84Y),
-                lng: Number(data.Wgs84X),
-              },
-            }
-          );
-        });
-        console.log(this.coordinates);
-
+        console.log(this.filterData);
       }).catch((error) => { console.log(error); });
     },
     mapReady() {
