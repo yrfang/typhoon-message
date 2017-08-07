@@ -7,12 +7,12 @@ import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
-import Icon from 'vue-awesome/components/Icon'
+// import Icon from 'vue-awesome/components/Icon'
 
 Vue.use(Router);
 Vue.use(VueAxios, axios);
 Vue.use(BootstrapVue);
-Vue.component('icon', Icon);
+// Vue.component('icon', Icon);
 
 import DisasterData from '@/components/DisasterData';
 import DisasterTable from '@/components/DisasterTable';
