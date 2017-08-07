@@ -13,7 +13,7 @@
       p#time 時間：
       p#location 地點：
       p#description 災情描述：
-  //- pre {{ powerCoordinates }}
+  pre {{ powerCoordinates }}
   #map
 //- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 </template>
@@ -99,6 +99,23 @@ export default {
         position: dataPoint,
         map: map,
         title: "路樹災情",
+      });
+    },
+    mapTest() {
+      const mapElement = document.getElementById('map-test');
+      const dataOptions = {
+        zoom: 13,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        center: new google.maps.LatLng(25.0533102,121.54237),
+      }
+      const map = new google.maps.Map(mapElement, dataOptions);
+
+      this.powerCoordinates.forEach((coord) => {
+        const position = new google.maps.LatLng(coord.latitude, coord.longitude);
+        const marker = new google.maps.Marker({
+          position,
+          map
+        });
       });
     },
   },
