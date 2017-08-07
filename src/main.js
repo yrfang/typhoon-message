@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
+import 'vue-awesome/icons/flag'
 import 'font-awesome/css/font-awesome.css'
 
 Vue.config.productionTip = false
