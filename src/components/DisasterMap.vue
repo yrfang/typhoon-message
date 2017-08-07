@@ -1,6 +1,18 @@
 <template lang="pug">
 .DisasterMap
-  h4 Hi, google map coming soon...
+  .row.bar
+    .alert.alert-info.col-xs-12
+      p 如有供電問題，請撥打台電客服1911。1040808
+      p 目前停電處尚未： {{ filteredPowerDataByArea.length }} 處
+  .row.bar
+    select.selectedArea(v-model="selectedArea")
+      option(v-for="area in areas") {{ area }}
+  br
+  .row.bar
+    .alert.alert-success.col-xs-12
+      p#time 時間：
+      p#location 地點：
+      p#description 災情描述：
   #map
 //- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 </template>
@@ -13,29 +25,46 @@ const DisasterApiUrl = "https://tcgbusfs.blob.core.windows.net/blobfs/GetDisaste
 export default {
   data() {
     return {
-      disasterData: [],
+      areas: ['全部','萬華區','中正區','大同區','中山區','大安區','南港區','文山區','松山區','信義區','士林區','北投區','內湖區'],
+      selectedArea: '全部',
       markers: [],
     }
   },
   mounted() {
-    this.getPowerData();
+    this.getMarkers();
+  },
+  computed: {
+    filteredPowerDataByArea() {
+      const selectedArea = this.selectedArea;
+      return this.markers.filter((data) => {
+        if (data.state == 'true') {
+          if (selectedArea == '全部') return data;
+        }
+        if (data.district.indexOf(selectedArea) > -1) return this.markers;
+      });
+    },
   },
   methods: {
-    getPowerData() {
+    getMarkers() {
       axios.get(DisasterApiUrl).then((response) => {
-        this.disasterData = response.data.DataSet['diffgr:diffgram'].NewDataSet.CASE_SUMMARY;
+        const disasterData = response.data.DataSet['diffgr:diffgram'].NewDataSet.CASE_SUMMARY;
         // console.log(this.disasterData);
 
-        this.disasterData.forEach((data) => {
+        disasterData.filter((data) => {
+          if (data.Name.indexOf('電力停電') > -1) return data;
+        }).forEach((data) => {
           this.markers.push(
             {
               position: {
                 lat: Number(data.Wgs84Y),
                 lng: Number(data.Wgs84X),
               },
-              title: data.CaseTime,
+              time: data.CaseTime,
+              district: data.CaseLocationDistrict,
               location: data.CaseLocationDescription,
+              description: data.CaseDescription,
               classification: data.Name,
+              state: data.CaseComplete,
               infoActive: false,
             }
           );
@@ -67,11 +96,31 @@ export default {
   top: 80px
   left: 0px
   bottom: 0px
-  // overflow-x: hidden
-  // overflow-y: scroll
-  padding-left: 20px
-  padding-right: 20px
+  width: 100%
+  overflow-x: hidden
+  overflow-y: scroll
+  // padding-left: 20px
+  // padding-right: 20px
 
-h4
-  color: red
+
+.alert-info, .alert-success
+  width: 100%
+.alert-info > p
+  text-align: left
+  margin: 5px
+.alert-success > p
+  text-align: left
+  margin: 5px
+
+select.selectedArea
+  height: 40px
+  padding: 5px
+  border: solid 1px #aaa
+  width: 300px
+
+#map
+  border: solid 1px #000
+  width: calc(100% - 15px)
+  height: 530px
+  margin: 10px
 </style>
