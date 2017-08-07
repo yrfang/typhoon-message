@@ -1,6 +1,6 @@
 <template lang="pug">
 .DisasterMap
-  h4 Hi, google map coming soon~~~
+  h4 Hi, google map coming soon...
 </template>
 
 <script>
