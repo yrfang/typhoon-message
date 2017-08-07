@@ -3,7 +3,7 @@
   .row.bar
     .alert.alert-info.col-xs-12
       p 如有供電問題，請撥打台電客服1911。1040808
-      p 目前停電處尚未： {{ filteredPowerDataByArea.length }} 處
+      p 目前停電處尚未： {{ powerDataByArea.length }} 處
   .row.bar
     select.selectedArea(v-model="selectedArea")
       option(v-for="area in areas") {{ area }}
@@ -28,13 +28,15 @@ export default {
       areas: ['全部','萬華區','中正區','大同區','中山區','大安區','南港區','文山區','松山區','信義區','士林區','北投區','內湖區'],
       selectedArea: '全部',
       markers: [],
+      coordinates: [],
     }
   },
   mounted() {
-    this.getMarkers();
+    this.getPowerData();
+    // this.mapTest(); //大安區測試
   },
   computed: {
-    filteredPowerDataByArea() {
+    powerDataByArea() {
       const selectedArea = this.selectedArea;
       return this.markers.filter((data) => {
         if (data.state == 'true') {
@@ -45,7 +47,7 @@ export default {
     },
   },
   methods: {
-    getMarkers() {
+    getPowerData() {
       axios.get(DisasterApiUrl).then((response) => {
         const disasterData = response.data.DataSet['diffgr:diffgram'].NewDataSet.CASE_SUMMARY;
         // console.log(this.disasterData);
@@ -74,9 +76,9 @@ export default {
     },
     mapReady() {
       var myOptions = {
-        zoom: 10,
+        zoom: 13,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
-        center: new google.maps.LatLng(24.988143920898438,121.57535552978516)
+        center: new google.maps.LatLng(25.0533102,121.542379)
       };
       var map = new google.maps.Map(document.getElementById("map"), myOptions);
       var dataPoint = {lat: 24.9881439, lng: 121.57535552978516};
@@ -99,9 +101,8 @@ export default {
   width: 100%
   overflow-x: hidden
   overflow-y: scroll
-  // padding-left: 20px
-  // padding-right: 20px
-
+  padding-left: 20px
+  padding-right: 20px
 
 .alert-info, .alert-success
   width: 100%
@@ -120,7 +121,7 @@ select.selectedArea
 
 #map
   border: solid 1px #000
-  width: calc(100% - 15px)
-  height: 530px
-  margin: 10px
+  width: calc(100% - 50px)
+  height: 550px
+  margin: 10px 30px
 </style>
