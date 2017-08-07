@@ -14,16 +14,33 @@ export default {
   data() {
     return {
       disasterData: [],
+      markers: [],
     }
   },
   mounted() {
-    this.getData();
+    this.getPowerData();
   },
   methods: {
-    getData() {
+    getPowerData() {
       axios.get(DisasterApiUrl).then((response) => {
         this.disasterData = response.data.DataSet['diffgr:diffgram'].NewDataSet.CASE_SUMMARY;
-        console.log(this.disasterData);
+        // console.log(this.disasterData);
+
+        this.disasterData.forEach((data) => {
+          this.markers.push(
+            {
+              position: {
+                lat: Number(data.Wgs84Y),
+                lng: Number(data.Wgs84X),
+              },
+              title: data.CaseTime,
+              location: data.CaseLocationDescription,
+              classification: data.Name,
+              infoActive: false,
+            }
+          );
+        });
+        console.log(this.markers);
       }).catch((error) => { console.log(error); });
     },
     mapReady() {
