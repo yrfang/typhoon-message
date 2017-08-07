@@ -3,7 +3,7 @@
   .row.bar
     .alert.alert-info.col-xs-12
       p 如有供電問題，請撥打台電客服1911。1040808
-      p 目前停電處尚未： {{ powerDataByArea.length }} 處
+      p 目前停電處尚未： {{ powerInfo.length }} 處
   .row.bar
     select.selectedArea(v-model="selectedArea")
       option(v-for="area in areas") {{ area }}
@@ -27,7 +27,7 @@ export default {
     return {
       areas: ['全部','萬華區','中正區','大同區','中山區','大安區','南港區','文山區','松山區','信義區','士林區','北投區','內湖區'],
       selectedArea: '全部',
-      markers: [],
+      infos: [],
       coordinates: [],
     }
   },
@@ -36,13 +36,13 @@ export default {
     // this.mapTest(); //大安區測試
   },
   computed: {
-    powerDataByArea() {
+    powerInfo() {
       const selectedArea = this.selectedArea;
-      return this.markers.filter((data) => {
+      return this.infos.filter((data) => {
         if (data.state == 'true') {
           if (selectedArea == '全部') return data;
         }
-        if (data.district.indexOf(selectedArea) > -1) return this.markers;
+        if (data.district.indexOf(selectedArea) > -1) return this.infos;
       });
     },
   },
@@ -50,17 +50,13 @@ export default {
     getPowerData() {
       axios.get(DisasterApiUrl).then((response) => {
         const disasterData = response.data.DataSet['diffgr:diffgram'].NewDataSet.CASE_SUMMARY;
-        // console.log(this.disasterData);
 
+        //infos list
         disasterData.filter((data) => {
           if (data.Name.indexOf('電力停電') > -1) return data;
         }).forEach((data) => {
-          this.markers.push(
+          this.infos.push(
             {
-              position: {
-                lat: Number(data.Wgs84Y),
-                lng: Number(data.Wgs84X),
-              },
               time: data.CaseTime,
               district: data.CaseLocationDistrict,
               location: data.CaseLocationDescription,
@@ -71,7 +67,23 @@ export default {
             }
           );
         });
-        console.log(this.markers);
+        console.log(this.infos);
+
+        //coordinates list
+        disasterData.filter((data) => {
+          if (data.Name.indexOf('電力停電') > -1) return data;
+        }).forEach((data) => {
+          this.coordinates.push(
+            {
+              position: {
+                lat: Number(data.Wgs84Y),
+                lng: Number(data.Wgs84X),
+              },
+            }
+          );
+        });
+        console.log(this.coordinates);
+
       }).catch((error) => { console.log(error); });
     },
     mapReady() {
