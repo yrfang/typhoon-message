@@ -10,9 +10,9 @@
   br
   .row.bar
     .alert.alert-success.col-xs-12
-      p#time 時間：
-      p#location 地點：
-      p#description 災情描述：
+      p#time 時間：data.CaseTime
+      p#location 地點：data.CaseLocationDescription
+      p#description 災情描述：data.CaseDescription
   pre {{ filteredByArea.length }}
   #test
   #map
@@ -30,9 +30,8 @@ export default {
       areas: ['全部','萬華區','中正區','大同區','中山區','大安區','南港區','文山區','松山區','信義區','士林區','北投區','內湖區'],
       selectedArea: '全部',
       powerData: [],
-      filterData: [],
-      infos: [],
-      coordinates: [],
+      filterCoordinates: [],
+      // infos: [],
     }
   },
   mounted() {
@@ -46,35 +45,6 @@ export default {
         if (data.CaseLocationDistrict.indexOf(selectedArea) > -1) return this.powerData;
       });
     },
-    // powerInfo() {
-    //   this.infos = [];
-    //   this.filteredByArea.filter((data) => {
-    //     if (data.CaseComplete == 'true') return data;
-    //   }).forEach((data) => {
-    //     this.infos.push(
-    //       {
-    //         time: data.CaseTime,
-    //         location: data.CaseLocationDescription,
-    //         description: data.CaseDescription,
-    //       }
-    //     );
-    //   });
-    //   return this.infos;
-    // },
-    // powerCoordinates() {
-    //   this.coordinates = [];
-    //   this.filteredByArea.filter((data) => {
-    //     if (data.CaseComplete == 'true') return data;
-    //   }).forEach((data) => {
-    //     this.coordinates.push(
-    //       {
-    //         latitude: Number(data.Wgs84Y),
-    //         longitude: Number(data.Wgs84X),
-    //       }
-    //     );
-    //   });
-    //   return this.coordinates;
-    // }
   },
   methods: {
     getPowerData() {
@@ -98,7 +68,12 @@ export default {
       this.powerData.filter((data) => {
         if (area == '全部') this.filterData = this.powerData;
         if (data.CaseLocationDistrict.indexOf(area) > -1) {
-          this.filterData.push(data);
+          this.filterData.push(
+            {
+              latitude: Number(data.Wgs84Y),
+              longitude: Number(data.Wgs84X),
+            }
+          );
         }
       });
       console.log(this.filterData);
@@ -129,7 +104,7 @@ export default {
       }
       const map = new google.maps.Map(mapElement, dataOptions);
 
-      this.coordinates = [];
+      this.filterCoordinates = [];
       this.filteredByArea.filter((data) => {
         if (data.CaseComplete == 'true') return data;
       }).forEach((data) => {
@@ -140,9 +115,9 @@ export default {
           }
         );
       });
-      return this.coordinates;
+      return this.filterCoordinates;
 
-      console.log(this.coordinates);
+      console.log(this.filterCoordinates);
 
       this.coordinates.forEach((coord) => {
         const position = new google.maps.LatLng(coord.latitude, coord.longitude);
