@@ -95,7 +95,7 @@ export default {
           map.fitBounds(bounds.extend(position));
         });
 
-        if (this.filterData.length == 0) {
+        if (this.powerData.length == 0) {
           console.log('No case without power!');
           this.withoutOffPowerData();
         }
