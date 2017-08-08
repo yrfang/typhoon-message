@@ -88,9 +88,9 @@ export default {
           marker.addListener('click', function(item) {
             console.log('hi');
             console.log(time, location, description);
-            timeBar.innerHTML = 'time: ' + time;
-            locationBar.innerHTML = 'location: ' + location;
-            descriptionBar.innerHTML = 'description: ' + description;
+            timeBar.innerHTML = '時間: ' + time;
+            locationBar.innerHTML = '地點: ' + location;
+            descriptionBar.innerHTML = '描述: ' + description;
           });
           map.fitBounds(bounds.extend(position));
         });
@@ -138,9 +138,9 @@ export default {
         });
         marker.addListener('click', function() {
           console.log('hi~for each distriction');
-          timeBar.innerHTML = 'time: ' + time;
-          locationBar.innerHTML = 'location: ' + location;
-          descriptionBar.innerHTML = 'description: ' + description;
+          timeBar.innerHTML = '時間: ' + time;
+          locationBar.innerHTML = '地點: ' + location;
+          descriptionBar.innerHTML = '描述: ' + description;
         });
         map.fitBounds(bounds.extend(position));
       });
