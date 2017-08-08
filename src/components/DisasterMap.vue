@@ -5,7 +5,7 @@
       p 如有供電問題，請撥打台電客服1911。1040808
       p 目前停電處尚未： {{ filteredByArea.length }} 處
   .row.bar
-    select.selectedArea(v-model="selectedArea")
+    select.selectedArea(v-model="selectedArea", @change="getFilterData(selectedArea)")
       option(v-for="area in areas") {{ area }}
   br
   .row.bar
@@ -13,7 +13,8 @@
       p#time 時間：
       p#location 地點：
       p#description 災情描述：
-  pre {{ powerCoordinates }}
+  pre {{ filteredByArea.length }}
+  #test
   #map
 //- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 </template>
@@ -28,6 +29,7 @@ export default {
     return {
       areas: ['全部','萬華區','中正區','大同區','中山區','大安區','南港區','文山區','松山區','信義區','士林區','北投區','內湖區'],
       selectedArea: '全部',
+      powerData: [],
       filterData: [],
       infos: [],
       coordinates: [],
@@ -39,53 +41,70 @@ export default {
   computed: {
     filteredByArea() {
       const selectedArea = this.selectedArea;
-      return this.filterData.filter((data) => {
+      return this.powerData.filter((data) => {
         if (selectedArea == '全部') return data;
-        if (data.CaseLocationDistrict.indexOf(selectedArea) > -1) return this.filterData;
+        if (data.CaseLocationDistrict.indexOf(selectedArea) > -1) return this.powerData;
       });
     },
-    powerInfo() {
-      this.infos = [];
-      this.filteredByArea.filter((data) => {
-        if (data.CaseComplete == 'true') return data;
-      }).forEach((data) => {
-        this.infos.push(
-          {
-            time: data.CaseTime,
-            location: data.CaseLocationDescription,
-            description: data.CaseDescription,
-          }
-        );
-      });
-      return this.infos;
-    },
-    powerCoordinates() {
-      this.coordinates = [];
-      this.filteredByArea.filter((data) => {
-        if (data.CaseComplete == 'true') return data;
-      }).forEach((data) => {
-        this.coordinates.push(
-          {
-            latitude: Number(data.Wgs84Y),
-            longitude: Number(data.Wgs84X),
-          }
-        );
-      });
-      return this.coordinates;
-    }
+    // powerInfo() {
+    //   this.infos = [];
+    //   this.filteredByArea.filter((data) => {
+    //     if (data.CaseComplete == 'true') return data;
+    //   }).forEach((data) => {
+    //     this.infos.push(
+    //       {
+    //         time: data.CaseTime,
+    //         location: data.CaseLocationDescription,
+    //         description: data.CaseDescription,
+    //       }
+    //     );
+    //   });
+    //   return this.infos;
+    // },
+    // powerCoordinates() {
+    //   this.coordinates = [];
+    //   this.filteredByArea.filter((data) => {
+    //     if (data.CaseComplete == 'true') return data;
+    //   }).forEach((data) => {
+    //     this.coordinates.push(
+    //       {
+    //         latitude: Number(data.Wgs84Y),
+    //         longitude: Number(data.Wgs84X),
+    //       }
+    //     );
+    //   });
+    //   return this.coordinates;
+    // }
   },
   methods: {
     getPowerData() {
       axios.get(DisasterApiUrl).then((response) => {
         const disasterData = response.data.DataSet['diffgr:diffgram'].NewDataSet.CASE_SUMMARY;
+        const selectedArea = this.selectedArea;
+
+        this.powerData = [];
 
         disasterData.filter((data) => {
           if (data.Name.indexOf('電力停電') > -1) return data;
         }).forEach((data) => {
-          this.filterData.push(data);
+          if (data.CaseComplete == 'true')
+          this.powerData.push(data);
         });
-        console.log(this.filterData);
+        // console.log(this.powerData);
       }).catch((error) => { console.log(error); });
+    },
+    getFilterData(area) {
+      this.filterData = [];
+      this.powerData.filter((data) => {
+        if (area == '全部') this.filterData = this.powerData;
+        if (data.CaseLocationDistrict.indexOf(area) > -1) {
+          this.filterData.push(data);
+        }
+      });
+      console.log(this.filterData);
+
+      // const test = document.getElementById('test');
+      // test.innerHTML = this.filterData.length;
     },
     mapReady() {
       var myOptions = {
@@ -110,7 +129,22 @@ export default {
       }
       const map = new google.maps.Map(mapElement, dataOptions);
 
-      this.powerCoordinates.forEach((coord) => {
+      this.coordinates = [];
+      this.filteredByArea.filter((data) => {
+        if (data.CaseComplete == 'true') return data;
+      }).forEach((data) => {
+        this.coordinates.push(
+          {
+            latitude: Number(data.Wgs84Y),
+            longitude: Number(data.Wgs84X),
+          }
+        );
+      });
+      return this.coordinates;
+
+      console.log(this.coordinates);
+
+      this.coordinates.forEach((coord) => {
         const position = new google.maps.LatLng(coord.latitude, coord.longitude);
         const marker = new google.maps.Marker({
           position,
