@@ -58,7 +58,7 @@ export default {
         disasterData.filter((data) => {
           if (data.Name.indexOf('電力停電') > -1) return data;
         }).forEach((data) => {
-          if (data.CaseComplete == 'true')
+          if (data.CaseComplete == 'false')
           this.powerData.push(data);
         });
         console.log(this.powerData);
@@ -118,7 +118,7 @@ export default {
           this.filterData.push(data);
         }
       });
-      console.log(this.filterData);
+      // console.log(this.filterData);
 
       const bounds = new google.maps.LatLngBounds;
 
