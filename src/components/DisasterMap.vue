@@ -58,7 +58,7 @@ export default {
         disasterData.filter((data) => {
           if (data.Name.indexOf('電力停電') > -1) return data;
         }).forEach((data) => {
-          if (data.CaseComplete == 'false')
+          if (data.CaseComplete == 'true')
           this.powerData.push(data);
         });
         console.log(this.powerData);
