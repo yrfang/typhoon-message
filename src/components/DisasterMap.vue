@@ -14,7 +14,8 @@
       p#locationBar(v-show="filteredByArea.length>0")
       p#descriptionBar(v-show="filteredByArea.length>0")
   #map
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+//- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCo-Ey3qBAjKZPvhNi6gTJ5tgF5hZm3TVw&callback=initMap"></script>
 </template>
 
 <script>
@@ -116,7 +117,6 @@ export default {
       });
       console.log(this.filterData);
 
-      // google map data binding
       const bounds = new google.maps.LatLngBounds;
 
       const mapElement = document.getElementById('map');
