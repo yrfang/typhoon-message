@@ -58,7 +58,7 @@ export default {
         disasterData.filter((data) => {
           if (data.Name.indexOf('電力停電') > -1) return data;
         }).forEach((data) => {
-          if (data.CaseComplete == 'true')
+          if (data.CaseComplete == 'false')
           this.powerData.push(data);
         });
         console.log(this.powerData);
@@ -137,7 +137,7 @@ export default {
           map
         });
         marker.addListener('click', function() {
-          console.log('hi~for each distriction');
+          // console.log('hi~for each distriction');
           timeBar.innerHTML = '時間: ' + time;
           locationBar.innerHTML = '地點: ' + location;
           descriptionBar.innerHTML = '描述: ' + description;
