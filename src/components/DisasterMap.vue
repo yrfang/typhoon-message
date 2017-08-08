@@ -14,7 +14,7 @@
       p#locationBar(v-show="filteredByArea.length>0")
       p#descriptionBar(v-show="filteredByArea.length>0")
   #map
-//- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 </template>
 
 <script>
@@ -64,37 +64,37 @@ export default {
         });
         console.log(this.powerData);
 
-        // const bounds = new google.maps.LatLngBounds;
-        //
-        // const mapElement = document.getElementById('map');
-        // const dataOptions = {
-        //   zoom: 10,
-        //   mapTypeId: google.maps.MapTypeId.ROADMAP,
-        // };
-        // const map = new google.maps.Map(mapElement, dataOptions);
-        //
-        // this.powerData.forEach((coord) => {
-        //   const lat = coord.Wgs84Y;
-        //   const lng = coord.Wgs84X;
-        //   const time = coord.CaseTime;
-        //   const location = coord.CaseLocationDescription;
-        //   const description = coord.CaseDescription;
-        //
-        //   const position = new google.maps.LatLng(lat, lng);
-        //   const marker = new google.maps.Marker({
-        //     position,
-        //     map
-        //   });
-        //
-        //   marker.addListener('click', function(item) {
-        //     console.log('hi');
-        //     console.log(time, location, description);
-        //     timeBar.innerHTML = 'time: ' + time;
-        //     locationBar.innerHTML = 'location: ' + location;
-        //     descriptionBar.innerHTML = 'description: ' + description;
-        //   });
-        //   map.fitBounds(bounds.extend(position));
-        // });
+        const bounds = new google.maps.LatLngBounds;
+
+        const mapElement = document.getElementById('map');
+        const dataOptions = {
+          zoom: 10,
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+        };
+        const map = new google.maps.Map(mapElement, dataOptions);
+
+        this.powerData.forEach((coord) => {
+          const lat = coord.Wgs84Y;
+          const lng = coord.Wgs84X;
+          const time = coord.CaseTime;
+          const location = coord.CaseLocationDescription;
+          const description = coord.CaseDescription;
+
+          const position = new google.maps.LatLng(lat, lng);
+          const marker = new google.maps.Marker({
+            position,
+            map
+          });
+
+          marker.addListener('click', function(item) {
+            console.log('hi');
+            console.log(time, location, description);
+            timeBar.innerHTML = 'time: ' + time;
+            locationBar.innerHTML = 'location: ' + location;
+            descriptionBar.innerHTML = 'description: ' + description;
+          });
+          map.fitBounds(bounds.extend(position));
+        });
       }).catch((error) => { console.log(error); });
 
     },
@@ -117,39 +117,39 @@ export default {
       console.log(this.filterData);
 
       // google map data binding
-      // const bounds = new google.maps.LatLngBounds;
-      //
-      // const mapElement = document.getElementById('map');
-      // const dataOptions = {
-      //   zoom: 10,
-      //   mapTypeId: google.maps.MapTypeId.ROADMAP,
-      // }
-      // const map = new google.maps.Map(mapElement, dataOptions);
-      //
-      // this.filterData.forEach((coord) => {
-      //   const lat = coord.Wgs84Y; //緯度
-      //   const lng = coord.Wgs84X; //精度
-      //   const time = coord.CaseTime;
-      //   const location = coord.CaseLocationDescription;
-      //   const description = coord.CaseDescription;
-      //
-      //   const position = new google.maps.LatLng(lat, lng);
-      //   const marker = new google.maps.Marker({
-      //     position,
-      //     map
-      //   });
-      //   marker.addListener('click', function() {
-      //     console.log('hi~for each distriction');
-      //     timeBar.innerHTML = 'time: ' + time;
-      //     locationBar.innerHTML = 'location: ' + location;
-      //     descriptionBar.innerHTML = 'description: ' + description;
-      //   });
-      //   map.fitBounds(bounds.extend(position));
-      // });
+      const bounds = new google.maps.LatLngBounds;
+
+      const mapElement = document.getElementById('map');
+      const dataOptions = {
+        zoom: 10,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+      }
+      const map = new google.maps.Map(mapElement, dataOptions);
+
+      this.filterData.forEach((coord) => {
+        const lat = coord.Wgs84Y; //緯度
+        const lng = coord.Wgs84X; //精度
+        const time = coord.CaseTime;
+        const location = coord.CaseLocationDescription;
+        const description = coord.CaseDescription;
+
+        const position = new google.maps.LatLng(lat, lng);
+        const marker = new google.maps.Marker({
+          position,
+          map
+        });
+        marker.addListener('click', function() {
+          console.log('hi~for each distriction');
+          timeBar.innerHTML = 'time: ' + time;
+          locationBar.innerHTML = 'location: ' + location;
+          descriptionBar.innerHTML = 'description: ' + description;
+        });
+        map.fitBounds(bounds.extend(position));
+      });
 
       if (this.filterData.length == 0) {
         console.log('No case without power!');
-        // this.withoutOffPowerData();
+        this.withoutOffPowerData();
       }
     },
     withoutOffPowerData() {
