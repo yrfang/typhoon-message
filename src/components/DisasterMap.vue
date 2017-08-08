@@ -5,7 +5,7 @@
       p 如有供電問題，請撥打台電客服1911。1040808
       p 目前停電處尚未： {{ filteredByArea.length }} 處
   .row.bar
-    select.selectedArea(v-model="selectedArea", @change="getFilterData(selectedArea)")
+    select.selectedArea(v-model="selectedArea", @change="mappingDataByArea(selectedArea)")
       option(v-for="area in areas") {{ area }}
   br
   .row.bar
@@ -30,7 +30,7 @@ export default {
       areas: ['全部','萬華區','中正區','大同區','中山區','大安區','南港區','文山區','松山區','信義區','士林區','北投區','內湖區'],
       selectedArea: '全部',
       powerData: [],
-      filterCoordinates: [],
+      filterData: [],
       // infos: [],
     }
   },
@@ -61,71 +61,76 @@ export default {
           this.powerData.push(data);
         });
         // console.log(this.powerData);
+
+        // const bounds = new google.maps.LatLngBounds;
+        //
+        // const mapElement = document.getElementById('map');
+        // const dataOptions = {
+        //   zoom: 10,
+        //   mapTypeId: google.maps.MapTypeId.ROADMAP,
+        // };
+        // const map = new google.maps.Map(mapElement, dataOptions);
+        //
+        // this.powerData.forEach((coord) => {
+        //   const lat = coord.Wgs84Y;
+        //   const lng = coord.Wgs84X;
+        //   const position = new google.maps.LatLng(lat, lng);
+        //   const marker = new google.maps.Marker({
+        //     position,
+        //     map
+        //   });
+        //   map.fitBounds(bounds.extend(position));
+        // });
       }).catch((error) => { console.log(error); });
+
     },
-    getFilterData(area) {
+    mappingDataByArea(area) {
       this.filterData = [];
       this.powerData.filter((data) => {
         if (area == '全部') this.filterData = this.powerData;
         if (data.CaseLocationDistrict.indexOf(area) > -1) {
-          this.filterData.push(
-            {
-              latitude: Number(data.Wgs84Y),
-              longitude: Number(data.Wgs84X),
-            }
-          );
+          this.filterData.push(data);
         }
       });
       console.log(this.filterData);
 
-      // const test = document.getElementById('test');
-      // test.innerHTML = this.filterData.length;
+      //google map data binding
+      // const bounds = new google.maps.LatLngBounds;
+      //
+      // const mapElement = document.getElementById('map');
+      // const dataOptions = {
+      //   zoom: 10,
+      //   mapTypeId: google.maps.MapTypeId.ROADMAP,
+      // }
+      // const map = new google.maps.Map(mapElement, dataOptions);
+      //
+      // this.filterData.forEach((coord) => {
+      //   const lat = coord.Wgs84Y; //緯度
+      //   const lng = coord.Wgs84X; //精度
+      //   const position = new google.maps.LatLng(lat, lng);
+      //   const marker = new google.maps.Marker({
+      //     position,
+      //     map
+      //   });
+      //   map.fitBounds(bounds.extend(position));
+      // });
+
+      // if (this.filterData.length == 0) {
+      //   console.log('No case without power!');
+      //   this.onPowerData();
+      // }
+
+      // //如果有data要顯示
+      // const time = document.getElementById('time'); time.innerHTML = '時間' + this.filterData[0].CaseTime;
     },
-    mapReady() {
-      var myOptions = {
-        zoom: 13,
+    withoutOffPowerData() {
+      const mapElement = document.getElementById('map');
+      const dataOptions = {
+        zoom: 12,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         center: new google.maps.LatLng(25.0533102,121.542379)
       };
-      var map = new google.maps.Map(document.getElementById("map"), myOptions);
-      var dataPoint = {lat: 24.9881439, lng: 121.57535552978516};
-      var marker = new google.maps.Marker({
-        position: dataPoint,
-        map: map,
-        title: "路樹災情",
-      });
-    },
-    mapTest() {
-      const mapElement = document.getElementById('map-test');
-      const dataOptions = {
-        zoom: 13,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        center: new google.maps.LatLng(25.0533102,121.54237),
-      }
       const map = new google.maps.Map(mapElement, dataOptions);
-
-      this.filterCoordinates = [];
-      this.filteredByArea.filter((data) => {
-        if (data.CaseComplete == 'true') return data;
-      }).forEach((data) => {
-        this.coordinates.push(
-          {
-            latitude: Number(data.Wgs84Y),
-            longitude: Number(data.Wgs84X),
-          }
-        );
-      });
-      return this.filterCoordinates;
-
-      console.log(this.filterCoordinates);
-
-      this.coordinates.forEach((coord) => {
-        const position = new google.maps.LatLng(coord.latitude, coord.longitude);
-        const marker = new google.maps.Marker({
-          position,
-          map
-        });
-      });
     },
   },
 }
