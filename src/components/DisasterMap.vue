@@ -14,7 +14,6 @@
       p#locationBar(v-show="filteredByArea.length>0")
       p#descriptionBar(v-show="filteredByArea.length>0")
   #map
-//- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCo-Ey3qBAjKZPvhNi6gTJ5tgF5hZm3TVw&callback=initMap"></script>
 </template>
 
 <script>
