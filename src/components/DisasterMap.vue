@@ -3,16 +3,16 @@
   .row.bar
     .alert.alert-info.col-xs-12
       p 如有供電問題，請撥打台電客服1911。1040808
-      p 目前停電處尚未： {{ filteredByArea.length }} 處
   .row.bar
     select.selectedArea(v-model="selectedArea", @change="mappingDataByArea(selectedArea)")
       option(v-for="area in areas") {{ area }}
   br
-  .row.bar(v-show="filteredByArea.length>0 && filteredByArea.length < powerData.length")
+  .row.bar
     .alert.alert-success.col-xs-12
-      p#time
-      p#location
-      p#description
+      p 目前停電處尚有： {{ filteredByArea.length }} 處
+      p#timeBar(v-show="filteredByArea.length>0")
+      p#locationBar(v-show="filteredByArea.length>0")
+      p#descriptionBar(v-show="filteredByArea.length>0")
   #map
 //- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 </template>
@@ -29,7 +29,7 @@ export default {
       selectedArea: '全部',
       powerData: [],
       filterData: [],
-      // infos: [],
+      infos: [],
     }
   },
   mounted() {
@@ -46,6 +46,10 @@ export default {
   },
   methods: {
     getPowerData() {
+      const timeBar = document.getElementById('timeBar');
+      const locationBar = document.getElementById('locationBar');
+      const descriptionBar = document.getElementById('descriptionBar');
+
       axios.get(DisasterApiUrl).then((response) => {
         const disasterData = response.data.DataSet['diffgr:diffgram'].NewDataSet.CASE_SUMMARY;
         const selectedArea = this.selectedArea;
@@ -58,7 +62,7 @@ export default {
           if (data.CaseComplete == 'true')
           this.powerData.push(data);
         });
-        // console.log(this.powerData);
+        console.log(this.powerData);
 
         // const bounds = new google.maps.LatLngBounds;
         //
@@ -72,10 +76,22 @@ export default {
         // this.powerData.forEach((coord) => {
         //   const lat = coord.Wgs84Y;
         //   const lng = coord.Wgs84X;
+        //   const time = coord.CaseTime;
+        //   const location = coord.CaseLocationDescription;
+        //   const description = coord.CaseDescription;
+        //
         //   const position = new google.maps.LatLng(lat, lng);
         //   const marker = new google.maps.Marker({
         //     position,
         //     map
+        //   });
+        //
+        //   marker.addListener('click', function(item) {
+        //     console.log('hi');
+        //     console.log(time, location, description);
+        //     timeBar.innerHTML = 'time: ' + time;
+        //     locationBar.innerHTML = 'location: ' + location;
+        //     descriptionBar.innerHTML = 'description: ' + description;
         //   });
         //   map.fitBounds(bounds.extend(position));
         // });
@@ -83,9 +99,13 @@ export default {
 
     },
     mappingDataByArea(area) {
-      const time = document.getElementById('time');
-      const location = document.getElementById('location');
-      const description = document.getElementById('description');
+      const timeBar = document.getElementById('timeBar');
+      const locationBar = document.getElementById('locationBar');
+      const descriptionBar = document.getElementById('descriptionBar');
+
+      timeBar.innerHTML = '';
+      locationBar.innerHTML = '';
+      descriptionBar.innerHTML = '';
 
       this.filterData = [];
       this.powerData.filter((data) => {
@@ -96,7 +116,7 @@ export default {
       });
       console.log(this.filterData);
 
-      //google map data binding
+      // google map data binding
       // const bounds = new google.maps.LatLngBounds;
       //
       // const mapElement = document.getElementById('map');
@@ -109,24 +129,27 @@ export default {
       // this.filterData.forEach((coord) => {
       //   const lat = coord.Wgs84Y; //緯度
       //   const lng = coord.Wgs84X; //精度
+      //   const time = coord.CaseTime;
+      //   const location = coord.CaseLocationDescription;
+      //   const description = coord.CaseDescription;
+      //
       //   const position = new google.maps.LatLng(lat, lng);
       //   const marker = new google.maps.Marker({
       //     position,
       //     map
+      //   });
+      //   marker.addListener('click', function() {
+      //     console.log('hi~for each distriction');
+      //     timeBar.innerHTML = 'time: ' + time;
+      //     locationBar.innerHTML = 'location: ' + location;
+      //     descriptionBar.innerHTML = 'description: ' + description;
       //   });
       //   map.fitBounds(bounds.extend(position));
       // });
 
       if (this.filterData.length == 0) {
         console.log('No case without power!');
-        // this.onPowerData();
-      }
-
-      if (this.filterData.length > 0) {
-        // //如果有data要顯示
-        time.innerHTML = '時間: ' + this.filterData[0].CaseTime;
-        location.innerHTML = '地點: ' + this.filterData[0].CaseLocationDescription;
-        description.innerHTML = '描述: ' + this.filterData[0].CaseDescription;
+        // this.withoutOffPowerData();
       }
     },
     withoutOffPowerData() {
