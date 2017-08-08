@@ -87,13 +87,18 @@ export default {
 
           marker.addListener('click', function(item) {
             console.log('hi');
-            console.log(time, location, description);
+            // console.log(time, location, description);
             timeBar.innerHTML = '時間: ' + time;
             locationBar.innerHTML = '地點: ' + location;
             descriptionBar.innerHTML = '描述: ' + description;
           });
           map.fitBounds(bounds.extend(position));
         });
+
+        if (this.filterData.length == 0) {
+          console.log('No case without power!');
+          this.withoutOffPowerData();
+        }
       }).catch((error) => { console.log(error); });
 
     },
