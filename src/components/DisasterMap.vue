@@ -8,13 +8,11 @@
     select.selectedArea(v-model="selectedArea", @change="mappingDataByArea(selectedArea)")
       option(v-for="area in areas") {{ area }}
   br
-  .row.bar
+  .row.bar(v-show="filteredByArea.length>0 && filteredByArea.length < powerData.length")
     .alert.alert-success.col-xs-12
-      p#time 時間：data.CaseTime
-      p#location 地點：data.CaseLocationDescription
-      p#description 災情描述：data.CaseDescription
-  pre {{ filteredByArea.length }}
-  #test
+      p#time
+      p#location
+      p#description
   #map
 //- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 </template>
@@ -85,6 +83,10 @@ export default {
 
     },
     mappingDataByArea(area) {
+      const time = document.getElementById('time');
+      const location = document.getElementById('location');
+      const description = document.getElementById('description');
+
       this.filterData = [];
       this.powerData.filter((data) => {
         if (area == '全部') this.filterData = this.powerData;
@@ -115,13 +117,17 @@ export default {
       //   map.fitBounds(bounds.extend(position));
       // });
 
-      // if (this.filterData.length == 0) {
-      //   console.log('No case without power!');
-      //   this.onPowerData();
-      // }
+      if (this.filterData.length == 0) {
+        console.log('No case without power!');
+        // this.onPowerData();
+      }
 
-      // //如果有data要顯示
-      // const time = document.getElementById('time'); time.innerHTML = '時間' + this.filterData[0].CaseTime;
+      if (this.filterData.length > 0) {
+        // //如果有data要顯示
+        time.innerHTML = '時間: ' + this.filterData[0].CaseTime;
+        location.innerHTML = '地點: ' + this.filterData[0].CaseLocationDescription;
+        description.innerHTML = '描述: ' + this.filterData[0].CaseDescription;
+      }
     },
     withoutOffPowerData() {
       const mapElement = document.getElementById('map');
