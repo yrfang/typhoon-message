@@ -3,8 +3,9 @@
   table.table
     thead
       tr
-        th(v-for="heading in headings")
+        th(v-for="heading in headings", @click="sortedByKey(heading)")
           | {{ changeRowName(heading) }}
+          span.arrow(:class="tableReverse ? 'dsc' : 'asc'", v-if="tableKey==heading")
         th
     tbody(v-for="(data,id) in buildPage")
       tr.main(@click="toggleRow(data)",
@@ -32,12 +33,38 @@
 <script>
 export default {
   name: 'disasterTable',
-  props: ['headings', 'dataFilterByArea', 'buildPage'],
+  props: ['headings', 'dataFilterByArea', 'totalPage', 'pagination'],
   data() {
     return {
       opened: [],
       toggleSeen: false,
+      tableKey: 'CaseTime',
+      tableReverse: false,
+      sortedData: []
     }
+  },
+  computed: {
+    dataSortedByKey() {
+      this.dataFilterByArea.sort((a,b) => {
+        a = a[this.tableKey];
+        b = b[this.tableKey];
+        if (this.tableReverse) {
+          return (a === b ? 0 : a > b ? 1 : -1);
+        } else {
+          return (a === b ? 0 : a > b ? -1 : 1);
+        }
+      });
+      return this.dataFilterByArea;
+    },
+    buildPage() {
+      if (this.pagination.currentPage > this.totalPage) {
+        // console.log("no more data!");
+        this.pagination.currentPage = 1;
+      }
+      var dataStart = (this.pagination.currentPage-1) * this.pagination.pageCount;
+      var dataEnd = (this.pagination.currentPage) * this.pagination.pageCount;
+      return this.dataSortedByKey.slice(dataStart, dataEnd);
+    },
   },
   methods: {
     changeRowName(key) {
@@ -60,6 +87,10 @@ export default {
       } else {
         return result='否';
       }
+    },
+    sortedByKey(key) {
+      this.tableKey = key;
+      this.tableReverse = !this.tableReverse;
     },
   }
 }
@@ -117,4 +148,22 @@ table
       .sub
         text-decoration: underline
         font-weight: 600
+
+.arrow
+  display: inline-block
+  vertical-align: middle
+  width: 0
+  height: 0
+  margin-left: 8px
+  opacity: 1
+
+.arrow.asc
+  border-left: 6px solid transparent
+  border-right: 6px solid transparent
+  border-bottom: 6px solid #000
+
+.arrow.dsc
+  border-left: 6px solid transparent
+  border-right: 6px solid transparent
+  border-top: 6px solid #000
 </style>

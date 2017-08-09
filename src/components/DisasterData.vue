@@ -1,5 +1,6 @@
 <template lang="pug">
 .DisasterData.tableList
+  //- button(@click="test") test
   .row.bar
     .alert.alert-info.col-xs-12
       p 防災災情及相關諮詢電話：87863119分機8900~8907
@@ -18,7 +19,8 @@
   .row
     DisasterTable(:headings="headings",
                   :dataFilterByArea="dataFilterByArea",
-                  :buildPage="buildPage")
+                  :totalPage="totalPage",
+                  :pagination="pagination",)
 </template>
 
 <script>
@@ -57,6 +59,20 @@ export default {
     this.readyForPage();
   },
   computed: {
+    dataSortedByKey() {
+      const headings = ["CaseTime", "CaseLocationDistrict", "CaseLocationDescription", "PName"];
+
+      this.disasterData.sort((a,b) => {
+        a = a[headings[2]];
+        b = b[headings[2]];
+        if (this.reverse) {
+          return (a === b ? 0 : a > b ? -1 : 1);
+        } else {
+          return (a === b ? 0 : a > b ? 1 : -1);
+        }
+      });
+      return this.disasterData;
+    },
     dataFilterByArea() {
       const selectedArea = this.selectedArea;
       return this.disasterData.filter((data) => {
@@ -66,15 +82,6 @@ export default {
     },
     totalPage() {
       return Math.ceil(this.dataFilterByArea.length/this.pagination.pageCount);
-    },
-    buildPage() {
-      if (this.pagination.currentPage > this.totalPage) {
-        // console.log("no more data!");
-        this.pagination.currentPage = 1;
-      }
-      var dataStart = (this.pagination.currentPage-1) * this.pagination.pageCount;
-      var dataEnd = (this.pagination.currentPage) * this.pagination.pageCount;
-      return this.dataFilterByArea.slice(dataStart, dataEnd);
     },
     dataUncompleteCount() {
       this.caseCount = 0;
