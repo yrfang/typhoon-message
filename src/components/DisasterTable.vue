@@ -106,6 +106,7 @@ table
   text-align: left
 
   thead tr th
+    cursor: pointer
     &:nth-child(1)
       width: 20%
     &:nth-child(2)
@@ -120,6 +121,7 @@ table
 
   thead tr
     background-color: rgba(#ddd, 0.5)
+    cursor
 
   tbody tr.main
     &:hover
