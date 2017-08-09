@@ -1,6 +1,5 @@
 <template lang="pug">
-.DisasterData.tableList
-  //- button(@click="test") test
+.DisasterData
   .row.bar
     .alert.alert-info.col-xs-12
       p 防災災情及相關諮詢電話：87863119分機8900~8907
@@ -114,13 +113,15 @@ export default {
 </script>
 
 <style lang="sass">
-.tableList
+.DisasterData
   position: fixed
   top: 80px
   left: 0px
   bottom: 0px
   overflow-x: hidden
   overflow-y: scroll
+  padding-left: 20px
+  padding-right: 20px
 
 .bar
   padding-left: 20px
