@@ -2,6 +2,9 @@
 
 > typhoon-updated message in Taipei city
 
+## Demo
+[Taipei City's Typhoon Message](https://yrfang.github.io/typhoon-message/)
+
 ## Build Setup
 
 ``` bash
