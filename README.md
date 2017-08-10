@@ -32,7 +32,7 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 
 ## Deploy the application
 
-The quick start to document your VueJS project with ![Github Pages](https://pages.github.com/) when you use the ![standard webpack tools](http://vuejs-templates.github.io/webpack/) and run under command:
+The quick start to document your VueJS project with [Github Pages](https://pages.github.com/) when you use the [standard webpack tools](http://vuejs-templates.github.io/webpack/) and run under command:
 
 ```bash
 npm run build
